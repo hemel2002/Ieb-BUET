@@ -6,7 +6,8 @@ after an administrator approves them.
 
 - **Public site:** home, candidate directory (search and filter), individual profiles, manifestos, about.
 - **Admin area** (`/admin`): candidate editing, photo upload, positions, comment moderation, site text, audit log.
-- **Stack:** Next.js 16 (App Router, Server Actions), TypeScript, Tailwind CSS 4, Prisma 6 with SQLite, sharp for images.
+- **Stack:** Next.js 16 (App Router, Server Actions), TypeScript, Tailwind CSS 4, Prisma 6 with PostgreSQL (Neon),
+  Vercel Blob for photos, sharp for image processing.
 
 ---
 
@@ -58,16 +59,24 @@ npm run data:verify    # check every spreadsheet entry against the database
 
 ## 2. Local installation
 
-Requirements: **Node.js 20.9+** (tested on Node 26) and npm. You only need Python 3 + `openpyxl` to re-extract the
+Requirements: **Node.js 20.9+** (tested on Node 26) and npm. You need Python 3 + `openpyxl` only to re-extract the
 spreadsheet.
 
 ```bash
 npm install                          # install scripts for prisma/esbuild are pre-approved in package.json
-cp .env.example .env                 # then set APP_SECRET (see the comment in the file)
-npm run db:setup                     # create storage/ieb.db, apply migrations, import candidates
+cp .env.example .env                 # set APP_SECRET and the two database URLs (see below)
+npm run db:setup                     # apply migrations and import the candidates
 npm run admin:create -- --email you@example.org --name "Your Name"   # prompts for a password (12+ chars)
 npm run dev                          # http://localhost:3000, admin at /admin/login
 ```
+
+**A database for local development:**
+- **Neon:** create a *development branch* of the project database in the Neon console, and paste its pooled and
+  direct URLs into `DATABASE_URL` and `DATABASE_URL_UNPOOLED`.
+- **Offline:** run `npx prisma dev` (a local Postgres bundled with Prisma), and use the `postgres://…` URL it prints
+  for both variables, with `&connection_limit=1&pgbouncer=true` added to the end.
+
+Without `BLOB_READ_WRITE_TOKEN`, uploaded photos are saved to `storage/uploads` and served from `/media/candidates/…`.
 
 Other commands:
 
@@ -82,79 +91,59 @@ Other commands:
 
 ## 3. Database
 
-- Schema: `prisma/schema.prisma`. Migration: `prisma/migrations/*/migration.sql`.
+- Schema: `prisma/schema.prisma` (PostgreSQL). Migration: `prisma/migrations/*/migration.sql`.
 - The migration adds **CHECK constraints** that Prisma cannot express, so the database itself rejects bad data:
   - comment `status` must be `pending`, `approved` or `rejected`
   - an anonymous comment cannot have a stored name, and a public one must have a name
   - admin `role` must be `admin` or `moderator`
 - Unique constraints: membership number; one entry per candidate per position; one ballot number per position.
-- Persistent data lives in `storage/`: `ieb.db` plus `uploads/candidates/*.webp`. **Back up both.**
-  ```bash
-  sqlite3 storage/ieb.db ".backup 'backup-$(date +%F).db'" && tar czf uploads-$(date +%F).tgz storage/uploads
-  ```
-
-**Moving to PostgreSQL:**
-1. In `schema.prisma`, set `provider = "postgresql"` and point `DATABASE_URL` at your server.
-2. Move `prisma/migrations` aside and run `npx prisma migrate dev --name init`.
-3. Copy the five `CHECK` constraints from the SQLite migration into the new migration as
-   `ALTER TABLE … ADD CONSTRAINT …` statements.
-4. Run `npm run db:seed`.
-
-No application code changes are needed.
+- Failed sign-in attempts are stored in the `LoginAttempt` table, so the limit holds across serverless instances.
+- **Backups:** Neon keeps point-in-time history (see the Neon console). For a manual copy, run
+  `pg_dump "$DATABASE_URL_UNPOOLED" > backup.sql`.
 
 ---
 
-## 4. Production deployment (single Linux server)
+## 4. Deploying to Vercel
 
-The app needs a **persistent disk** for the SQLite file and uploaded photos. A small VPS works well (Ubuntu, 1 GB
-RAM). It will **not** run as-is on serverless hosts such as Vercel, which have no persistent filesystem. Those need
-PostgreSQL (above) plus object storage for photos, which would mean replacing `src/lib/images.ts` and the
-`/media` route.
+The repository is ready for Vercel. The `vercel-build` script does the following on every deploy:
+1. generates the Prisma client
+2. applies pending migrations
+3. imports the spreadsheet **only if the database is empty**, so candidates an administrator deleted are not
+   re-imported
+4. builds the site
 
-```bash
-# as a deploy user, in /opt/ieb-campaign
-git clone <repo> . && npm ci && npm run build
-sudo mkdir -p /var/lib/ieb-campaign && sudo chown $USER /var/lib/ieb-campaign
-cp .env.production.example .env           # set APP_SECRET; paths point at /var/lib/ieb-campaign
-npm run db:setup
-npm run admin:create -- --email you@example.org --name "Your Name"
-```
+**One-time setup in the Vercel dashboard:**
 
-`/etc/systemd/system/ieb-campaign.service`:
-```ini
-[Unit]
-Description=Vote 4 BUETian site
-After=network.target
+1. **Add New → Project →** import the GitHub repository `hemel2002/Ieb-BUET`. The framework is detected as Next.js;
+   leave the build settings as they are.
+2. Before deploying, open **Environment Variables** and add:
+   - `APP_SECRET`: a random 64-character hex string. Generate it with
+     `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
+   - `TRUSTED_IP_HEADER` = `x-real-ip`
+   - `ADMIN_EMAIL` and `ADMIN_PASSWORD` (12+ characters): creates the first administrator on the first deploy.
+3. **Deploy.** The first build fails at the migration step because there is no database yet. That is expected.
+4. **Storage → Create Database → Neon** (Postgres). Connect it to the project for all environments. This adds
+   `DATABASE_URL` and `DATABASE_URL_UNPOOLED`.
+5. **Storage → Create → Blob.** Connect it to the project. This adds `BLOB_READ_WRITE_TOKEN`.
+6. **Deployments → … → Redeploy.** The build creates the tables, imports the 103 candidates and creates your admin
+   account.
+7. Sign in at `https://<your-project>.vercel.app/admin/login`. Then **delete `ADMIN_PASSWORD`** from the environment
+   variables. It is only read when no administrator exists, but it should not be left there.
 
-[Service]
-WorkingDirectory=/opt/ieb-campaign
-EnvironmentFile=/opt/ieb-campaign/.env
-ExecStart=/usr/bin/npm start -- -p 3000
-Restart=always
-User=deploy
+After that, every push to `main` deploys automatically.
 
-[Install]
-WantedBy=multi-user.target
-```
+**Notes:**
+- Photo uploads are limited to 4 MB, because Vercel rejects request bodies over 4.5 MB.
+- Preview deployments share the production database unless you give the Preview environment its own Neon branch.
+- If you see `prepared statement "s0" already exists` in the logs, add `&pgbouncer=true` to `DATABASE_URL`.
 
-nginx (then run `certbot --nginx` for HTTPS):
-```nginx
-server {
-  server_name vote4buetian.example.org;
-  client_max_body_size 6m;
-  location / {
-    proxy_pass http://127.0.0.1:3000;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-Host $host;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Real-IP $remote_addr;   # matches TRUSTED_IP_HEADER=x-real-ip
-  }
-}
-```
+**Hosting elsewhere instead.** Any Node host with PostgreSQL works:
+1. `npm ci && npm run vercel-build`
+2. `npm start`, behind HTTPS
+3. Set `TRUSTED_IP_HEADER` to whatever header your proxy sets with the client IP.
+4. Without Blob, set `UPLOAD_DIR` to a persistent directory.
 
-**HTTPS is required in production.** The admin session cookie is marked `Secure`, so sign-in will not work over
-plain HTTP. To deploy an update: `git pull && npm ci && npm run build && npx prisma migrate deploy && sudo systemctl
-restart ieb-campaign`.
+**HTTPS is required in production.** The admin session cookie is marked `Secure`.
 
 ---
 
@@ -172,8 +161,8 @@ All of this is done from the admin area (`/admin`):
   - `## ` makes a heading (e.g. Vision, Commitments, Key priorities)
 
   The public page shows the "last updated" date.
-- **Photo:** Upload or Replace (JPEG/PNG/WebP, up to 5 MB). The image is checked, auto-rotated, cropped to a 4:5
-  portrait, re-encoded to WebP at 400 and 800 px, and stripped of metadata. Remove photo brings back the
+- **Photo:** Upload or Replace (JPEG/PNG/WebP, up to 4 MB). The image is checked, auto-rotated, cropped to a 4:5
+  portrait, re-encoded to WebP at 400 and 800 px, stripped of metadata, and stored in Vercel Blob. Remove photo brings back the
   placeholder.
 - **Positions:** assign or remove ballot entries on a candidate's page. Positions → rename, reorder or add posts
   and sections.
@@ -196,7 +185,7 @@ Roles: **admin** has full access. **moderator** can only see Overview, Comments 
 - Spam and abuse controls:
   - a hidden honeypot field
   - a signed form token that rejects submissions made under 3 seconds after page load, and forged tokens
-  - at most 3 comments per 10 minutes and 20 per day per IP, counted in the database so restarts don't reset them
+  - at most 3 comments per 10 minutes and 20 per day per IP, counted in the database
   - duplicate text for the same candidate is rejected
   - HTML, more than two links, and control or bidi-override characters are rejected or stripped
   - length limits on name and comment
@@ -206,8 +195,8 @@ Roles: **admin** has full access. **moderator** can only see Overview, Comments 
 - Passwords are hashed with scrypt (N=2¹⁷).
 - Sessions use random tokens; only their SHA-256 is stored. Cookies are httpOnly, SameSite=Lax and Secure, with a
   12-hour lifetime. Changing your password signs out your other sessions.
-- Login is rate-limited (5 attempts per email and 10 per IP every 15 minutes), and wrong passwords take as long to
-  reject as unknown emails.
+- Login is rate-limited in the database (5 failed attempts per email and 10 per IP every 15 minutes), and wrong
+  passwords take as long to reject as unknown emails.
 - **Every admin page and Server Action checks the session and role on the server.** The edge proxy only redirects
   people without a session cookie, as a convenience.
 - Server Actions get Next.js's built-in same-origin check.
@@ -236,7 +225,14 @@ Roles: **admin** has full access. **moderator** can only see Overview, Comments 
   - `/admin` redirects without a session, and a forged cookie is rejected
   - an unauthenticated Server Action call aimed at moderation changed nothing
 
+**Also tested against PostgreSQL** (a local Prisma Postgres server): the migration and its CHECK constraints, the
+import and its `--if-empty` mode, the production build, the sign-in lockout after 5 failures, anonymous comment
+submission, approval, and case-insensitive admin search.
+
+**Not tested:** uploads to Vercel Blob and a live Vercel deploy. Both need your Vercel account. The Blob code path
+switches on when `BLOB_READ_WRITE_TOKEN` is present; local-disk uploads were tested.
+
 **Known limitations:**
-- Rate limiting for logins is in-memory, so it assumes one server process (comment limits are in the database).
 - No email notifications for new comments.
-- New admin accounts are created from the command line, not the dashboard.
+- New admin accounts are created from the command line (or via `ADMIN_EMAIL`/`ADMIN_PASSWORD` for the first one),
+  not from the dashboard.

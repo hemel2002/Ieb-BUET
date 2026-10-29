@@ -14,8 +14,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   experimental: {
-    // Candidate photos are uploaded through a Server Action (5 MB max + multipart overhead).
-    serverActions: { bodySizeLimit: "6mb" },
+    // Candidate photos are uploaded through a Server Action (4 MB max + multipart overhead).
+    // Vercel's own request limit is 4.5 MB.
+    serverActions: { bodySizeLimit: "4.5mb" },
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

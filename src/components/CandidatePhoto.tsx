@@ -24,13 +24,15 @@ export function CandidatePhoto({ photoKey, name, sizes, priority, className = ""
   }, [photoKey]);
 
   const showPhoto = photoKey && !failed;
+  // Blob photos are stored as full URLs; locally stored ones as a key served by /media.
+  const base = photoKey?.startsWith("https://") ? photoKey : `/media/candidates/${photoKey}`;
   return (
     <div className={`relative aspect-[4/5] overflow-hidden bg-canvas ${className}`}>
       {showPhoto ? (
         <img
           ref={imgRef}
-          src={`/media/candidates/${photoKey}-800.webp`}
-          srcSet={`/media/candidates/${photoKey}-400.webp 400w, /media/candidates/${photoKey}-800.webp 800w`}
+          src={`${base}-800.webp`}
+          srcSet={`${base}-400.webp 400w, ${base}-800.webp 800w`}
           sizes={sizes}
           width={800}
           height={1000}

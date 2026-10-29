@@ -14,7 +14,9 @@
     "data:extract": "python3 -I scripts/extract_xlsx.py data/BUETian_IEB_Election_Candidates.xlsx data/candidates.json",
     "admin:create": "tsx scripts/create-admin.ts",
     "test": "tsx --test tests/*.test.ts",
-    "data:verify": "tsx scripts/verify-import.ts"
+    "data:verify": "tsx scripts/verify-import.ts",
+    "postinstall": "prisma generate",
+    "vercel-build": "prisma generate && prisma migrate deploy && tsx prisma/seed.ts --if-empty && next build"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -24,6 +26,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
+    "@vercel/blob": "^2.8.2",
     "next": "^16.4.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

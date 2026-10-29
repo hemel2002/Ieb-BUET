@@ -10,7 +10,7 @@ export default async function AdminCandidatesPage({ searchParams }: PageProps<"/
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q.trim().slice(0, 100) : "";
   const candidates = await db.candidate.findMany({
-    where: q ? { OR: [{ fullName: { contains: q } }, { membershipNo: { contains: q } }] } : {},
+    where: q ? { OR: [{ fullName: { contains: q, mode: "insensitive" } }, { membershipNo: { contains: q, mode: "insensitive" } }] } : {},
     orderBy: { fullName: "asc" },
     select: {
       id: true, fullName: true, membershipNo: true, photoKey: true, manifesto: true, isPublished: true, dataNotes: true,

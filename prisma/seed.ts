@@ -1,7 +1,8 @@
 /**
  * Imports data/candidates.json (produced from the spreadsheet by scripts/extract_xlsx.py).
  *
- * Safe to re-run: groups, positions, candidates and candidacies are matched on their
+ * Run on every Vercel deploy with --if-empty (imports only into an empty database).
+ * Safe to re-run manually: groups, positions, candidates and candidacies are matched on their
  * natural keys and only created when missing. Existing rows, including anything an
  * administrator has edited, are never overwritten. Conflicts are reported, not applied.
  */
@@ -24,6 +25,12 @@ type Source = { title: string; subtitle: string; sections: { name: string; entri
 const db = new PrismaClient();
 
 async function main() {
+  // Deploys pass --if-empty so records an administrator deleted are not re-imported.
+  if (process.argv.includes("--if-empty") && (await db.candidate.count()) > 0) {
+    console.log("Candidates already imported; skipping spreadsheet import (--if-empty).");
+    await seedFirstAdmin();
+    return;
+  }
   const src: Source = JSON.parse(readFileSync(join(__dirname, "../data/candidates.json"), "utf8"));
   const stats = { groups: 0, positions: 0, candidates: 0, candidacies: 0, skipped: 0, conflicts: 0 };
 

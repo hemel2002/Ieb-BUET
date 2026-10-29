@@ -6,11 +6,12 @@ import { audit, createSession, currentAdmin, destroySession, requireAdmin } from
 import { db } from "@/lib/db";
 import { log } from "@/lib/log";
 import { hashPassword, PASSWORD_MIN_LENGTH, verifyPassword } from "@/lib/password";
-import { hit, reset } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request";
 import { hmac } from "@/lib/secret";
 
 export type FormState = { error?: string; success?: string; fieldErrors?: Record<string, string> };
+
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 
 // Verifying against a dummy hash keeps response time the same for unknown emails.
 let dummyHash: Promise<string> | null = null;
@@ -20,10 +21,13 @@ export async function login(_prev: FormState, fd: FormData): Promise<FormState> 
   const password = String(fd.get("password") ?? "").slice(0, 200);
   if (!email || !password) return { error: "Enter your email and password." };
 
-  const ipKey = hmac("ip", await clientIp());
-  const byIp = hit(`login:ip:${ipKey}`, 10, 15 * 60 * 1000);
-  const byEmail = hit(`login:email:${email}`, 5, 15 * 60 * 1000);
-  if (!byIp.ok || !byEmail.ok) {
+  // Failed attempts are counted in the database so the limit holds across serverless instances.
+  const keys = { email: `email:${email}`, ip: `ip:${hmac("ip", await clientIp())}` };
+  const since = new Date(Date.now() - LOGIN_WINDOW_MS);
+  const [byEmail, byIp] = await Promise.all(
+    [keys.email, keys.ip].map((key) => db.loginAttempt.count({ where: { key, createdAt: { gt: since } } })),
+  );
+  if (byEmail >= 5 || byIp >= 10) {
     log("warn", "admin.login_rate_limited", { email });
     return { error: "Too many sign-in attempts. Please wait 15 minutes and try again." };
   }
@@ -32,11 +36,14 @@ export async function login(_prev: FormState, fd: FormData): Promise<FormState> 
   dummyHash ??= hashPassword("not-a-real-password");
   const valid = await verifyPassword(password, admin?.passwordHash ?? (await dummyHash));
   if (!admin || !valid) {
+    await db.loginAttempt.createMany({ data: [{ key: keys.email }, { key: keys.ip }] });
     log("warn", "admin.login_failed", { email });
     return { error: "The email or password is incorrect." };
   }
 
-  reset(`login:email:${email}`);
+  await db.loginAttempt.deleteMany({
+    where: { OR: [{ key: keys.email }, { createdAt: { lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } }] },
+  });
   await db.admin.update({ where: { id: admin.id }, data: { lastLoginAt: new Date() } });
   await createSession(admin.id);
   await audit(admin.id, "login");

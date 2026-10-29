@@ -119,7 +119,7 @@ export default async function EditCandidatePage({ params, searchParams }: PagePr
               <div>
                 <label htmlFor="photo" className="field-label">{candidate.photoKey ? "Replace photo" : "Upload photo"}</label>
                 <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required className="block w-full text-[0.9375rem] file:mr-3 file:rounded-[var(--radius-md)] file:border file:border-line-strong file:bg-surface file:px-3 file:py-1.5 file:font-semibold" />
-                <p className="field-hint mt-1.5">JPEG, PNG or WebP, up to 5 MB. Cropped to a 4:5 portrait automatically.</p>
+                <p className="field-hint mt-1.5">JPEG, PNG or WebP, up to 4 MB. Cropped to a 4:5 portrait automatically.</p>
               </div>
               <SubmitButton size="sm" pendingLabel="Uploading…">Upload</SubmitButton>
             </ActionForm>

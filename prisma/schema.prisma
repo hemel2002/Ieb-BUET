@@ -1,17 +1,17 @@
-// Database schema for the Vote 4 BUETian campaign site.
+// Database schema for the Vote 4 BUETian campaign site (PostgreSQL, e.g. Neon).
 //
-// SQLite is used for single-server deployments. To move to PostgreSQL, change
-// `provider` to "postgresql", point DATABASE_URL at the server, delete the
-// prisma/migrations folder and run `npx prisma migrate dev --name init`, then
-// re-add the CHECK constraints from the SQLite migration (see README).
+// DATABASE_URL is the pooled connection used by the app; DATABASE_URL_UNPOOLED is the
+// direct connection Prisma Migrate needs. The Neon integration on Vercel sets both.
+// CHECK constraints that Prisma cannot express are added in the migration SQL.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 /// A ballot section, e.g. "Headquarters Executive" or "Central Council Member from Dhaka Center".
@@ -58,7 +58,8 @@ model Candidate {
   additionalInfo         String?
   manifesto              String?
   manifestoUpdatedAt     DateTime?
-  /// Base name of the processed photo files in UPLOAD_DIR/candidates (null = placeholder).
+  /// Photo location without the "-400.webp"/"-800.webp" suffix: a Vercel Blob URL, or a
+  /// file key under UPLOAD_DIR/candidates when running without Blob. Null = placeholder.
   photoKey               String?
   isPublished            Boolean     @default(true)
   /// Internal notes about source-data issues. Never shown publicly.
@@ -161,4 +162,14 @@ model AuditLog {
   createdAt DateTime @default(now())
 
   @@index([createdAt])
+}
+
+/// Failed sign-in attempts, kept in the database so limits hold across serverless instances.
+model LoginAttempt {
+  id        Int      @id @default(autoincrement())
+  /// "email:<address>" or "ip:<hmac>"
+  key       String
+  createdAt DateTime @default(now())
+
+  @@index([key, createdAt])
 }

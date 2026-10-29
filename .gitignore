@@ -1,0 +1,10 @@
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+.env
+.env.local
+storage/
+.hallmark/
+.playwright-mcp/
+/BUETian_IEB_Election_Candidates.xlsx

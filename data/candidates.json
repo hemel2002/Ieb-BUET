@@ -1,0 +1,1290 @@
+{
+  "title": "Vote 4 BUETian",
+  "subtitle": "BUET ALUMNI CANDIDATES — IEB ELECTION 2027-2028",
+  "sections": [
+    {
+      "name": "Headquarters Executive",
+      "entries": [
+        {
+          "ballotNo": "2",
+          "post": "President",
+          "name": "ENGR. SYED MAHFUZ AHMAD, PEng.",
+          "membershipNo": "F/04266",
+          "sourceRow": 6,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "5",
+          "post": "HAGS (Academic & International)",
+          "name": "ENGR. SHAH MD. FAYSAL-BIN-RAHMAN",
+          "membershipNo": "M/24563",
+          "sourceRow": 6,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "3",
+          "post": "President",
+          "name": "PROF. DR. ENGR. MD. ALI",
+          "membershipNo": "F/07759",
+          "sourceRow": 7,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "1",
+          "post": "HAGS (Administration & Finance)",
+          "name": "ENGR. MD. AHSANUL RASEL",
+          "membershipNo": "F/14140",
+          "sourceRow": 7,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "2",
+          "post": "Vice President (Administration & Finance)",
+          "name": "ENGR. A.K.M. SHARIFUL ISLAM, PEng.",
+          "membershipNo": "F/05030",
+          "sourceRow": 8,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "3",
+          "post": "HAGS (Administration & Finance)",
+          "name": "ENGR. SHAHADAT AHMED MASUM",
+          "membershipNo": "F/14480",
+          "sourceRow": 8,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "1",
+          "post": "Honorary General Secretary",
+          "name": "ENGR. MIAH MD. QUAYYUM",
+          "membershipNo": "F/03909",
+          "sourceRow": 9,
+          "sourceSide": "left"
+        }
+      ]
+    },
+    {
+      "name": "Dhaka Center Executive",
+      "entries": [
+        {
+          "ballotNo": "1",
+          "post": "Chairman",
+          "name": "ENGR. KAZI MD. OBAIDULLAH, PEng.",
+          "membershipNo": "F/04482",
+          "sourceRow": 13,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "1",
+          "post": "Vice-Chairman (Academic & HRD)",
+          "name": "ENGR. MD. KAMRUL ISLAM",
+          "membershipNo": "F/07538",
+          "sourceRow": 13,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "2",
+          "post": "Chairman",
+          "name": "ENGR. GOLAM MD. KHAN FARUK",
+          "membershipNo": "F/04984",
+          "sourceRow": 14,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "3",
+          "post": "Honorary Secretary",
+          "name": "ENGR. MD. ABDUL HAMID",
+          "membershipNo": "F/15212",
+          "sourceRow": 14,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "3",
+          "post": "Chairman",
+          "name": "DR. ENGR. MD. MONIRUL ISLAM",
+          "membershipNo": "F/05662",
+          "sourceRow": 15,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "4",
+          "post": "Honorary Secretary",
+          "name": "ENGR. MD. MAHMUDUR RAHMAN",
+          "membershipNo": "M/46706",
+          "sourceRow": 15,
+          "sourceSide": "right"
+        }
+      ]
+    },
+    {
+      "name": "Divisional Executive",
+      "entries": [
+        {
+          "ballotNo": "1",
+          "post": "Secretary (Civil Engg. Division)",
+          "name": "ENGR. MD. AL-MAMUN GAZI, PEng.",
+          "membershipNo": "F/13699",
+          "sourceRow": 19,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "1",
+          "post": "Chairman (Chemical Engg. Division)",
+          "name": "ENGR. MD. IDRIS ALI",
+          "membershipNo": "F/08520",
+          "sourceRow": 19,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "3",
+          "post": "Chairman (Electrical Engg. Division)",
+          "name": "ENGR. S.M. FARHAD HOSSAIN",
+          "membershipNo": "F/09894",
+          "sourceRow": 20,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "2",
+          "post": "Chairman (Chemical Engg. Division)",
+          "name": "ENGR. MD. HUMAYUN KABIR",
+          "membershipNo": "F/08792",
+          "sourceRow": 20,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "3",
+          "post": "Secretary (Electrical Engg. Division)",
+          "name": "ENGR. MD. BADRUL ALAM",
+          "membershipNo": "F/14252",
+          "sourceRow": 21,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "1",
+          "post": "Vice-Chairman (Chemical Engg. Division)",
+          "name": "ENGR. MD. SAZZAD HOSSAIN",
+          "membershipNo": "F/10921",
+          "sourceRow": 21,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "1",
+          "post": "Chairman (Mechanical Engg. Division)",
+          "name": "ENGR. MD. HAFIZUR RAHMAN",
+          "membershipNo": "F/04265",
+          "sourceRow": 22,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "1",
+          "post": "Secretary (Chemical Engg. Division)",
+          "name": "ENGR. MST. NAZNIN AKTHER",
+          "membershipNo": "F/14660",
+          "sourceRow": 22,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "2",
+          "post": "Chairman (Mechanical Engg. Division)",
+          "name": "DR. ENGR. REAZ HASAN KHONDOKER, PEng.",
+          "membershipNo": "F/05432",
+          "sourceRow": 23,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "2",
+          "post": "Secretary (Chemical Engg. Division)",
+          "name": "ENGR. MD. BAYEZID HUSSAIN",
+          "membershipNo": "M/25508",
+          "sourceRow": 23,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "3",
+          "post": "Chairman (Mechanical Engg. Division)",
+          "name": "DR. ENGR. MD. SHAFIQUL ISLAM",
+          "membershipNo": "F/09322",
+          "sourceRow": 24,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "4",
+          "post": "Chairman (Young Engineers Chapter)",
+          "name": "ENGR. ASIF HOSSAIN",
+          "membershipNo": "M/44741",
+          "sourceRow": 24,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "1",
+          "post": "Vice-Chairman (Mechanical Engg. Division)",
+          "name": "ENGR. MD. REJAUL KARIM",
+          "membershipNo": "F/08521",
+          "sourceRow": 25,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "2",
+          "post": "Secretary (Young Engineers Chapter)",
+          "name": "ENGR. ASIF HOSSAIN",
+          "membershipNo": "M/44741",
+          "sourceRow": 25,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "1",
+          "post": "Secretary (Mechanical Engg. Division)",
+          "name": "ENGR. MD. SADEQUR RAHMAN",
+          "membershipNo": "F/06517",
+          "sourceRow": 26,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "2",
+          "post": "Vice-Chairman (Women Engineers Chapter)",
+          "name": "ENGR. FARHANA CHOWDHURY",
+          "membershipNo": "M/24012",
+          "sourceRow": 26,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "2",
+          "post": "Secretary (Mechanical Engg. Division)",
+          "name": "ENGR. MD. SHAHJAHAN ALAM",
+          "membershipNo": "F/11322",
+          "sourceRow": 27,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "1",
+          "post": "Secretary (Women Engineers Chapter)",
+          "name": "PROF. DR. ENGR. ARMANA SABIHA HUQ",
+          "membershipNo": "F/13814",
+          "sourceRow": 27,
+          "sourceSide": "right"
+        }
+      ]
+    },
+    {
+      "name": "Central Council Member from Dhaka Center",
+      "entries": [
+        {
+          "ballotNo": "2",
+          "name": "ENGR. MD. ABDUR ROUF",
+          "membershipNo": "F/02321",
+          "post": null,
+          "sourceRow": 31,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "84",
+          "name": "ENGR. BASHIR AHAMMED",
+          "membershipNo": "F/11084",
+          "post": null,
+          "sourceRow": 31,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "4",
+          "name": "ENGR. MD. AINUL HAQUE, PEng.",
+          "membershipNo": "F/03144",
+          "post": null,
+          "sourceRow": 32,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "87",
+          "name": "ENGR. MD. SHAHJAHAN ALAM",
+          "membershipNo": "F/11322",
+          "post": null,
+          "sourceRow": 32,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "5",
+          "name": "ENGR. MD. ABDUL MATIN MIAZI",
+          "membershipNo": "F/03321",
+          "post": null,
+          "sourceRow": 33,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "99",
+          "name": "ENGR. SYED MAHABUBUL HAQUE",
+          "membershipNo": "F/12975",
+          "post": null,
+          "sourceRow": 33,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "6",
+          "name": "ENGR. EMU REAZUL HASAN",
+          "membershipNo": "F/03377",
+          "post": null,
+          "sourceRow": 34,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "112",
+          "name": "ENGR. MD. NESAR UDDIN",
+          "membershipNo": "F/14137",
+          "post": null,
+          "sourceRow": 34,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "7",
+          "name": "BRIG. GEN. ENGR. M. MOFIZUR RAHMAN, PSC, PEng. (Retd.)",
+          "membershipNo": "F/03595",
+          "post": null,
+          "sourceRow": 35,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "114",
+          "name": "ENGR. MUHAMMAD AHSANUL RASEL",
+          "membershipNo": "F/14140",
+          "post": null,
+          "sourceRow": 35,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "10",
+          "name": "ENGR. MD. NURULLAH",
+          "membershipNo": "F/03816",
+          "post": null,
+          "sourceRow": 36,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "116",
+          "name": "ENGR. S. M. FAISAL MAHMUD",
+          "membershipNo": "F/14155",
+          "post": null,
+          "sourceRow": 36,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "11",
+          "name": "ENGR. MOYEED ROOMI, PEng.",
+          "membershipNo": "F/04050",
+          "post": null,
+          "sourceRow": 37,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "118",
+          "name": "ENGR. MD. SHAWKAT FERDOUS",
+          "membershipNo": "F/14203",
+          "post": null,
+          "sourceRow": 37,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "12",
+          "name": "ENGR. MD. HAFIZUR RAHMAN",
+          "membershipNo": "F/04265",
+          "post": null,
+          "sourceRow": 38,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "119",
+          "name": "ENGR. MD. ZAHIDUR RAHMAN",
+          "membershipNo": "F/14210",
+          "post": null,
+          "sourceRow": 38,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "13",
+          "name": "ENGR. KAZI MD. OBAIDULLAH (KAZI OBAID), PEng.",
+          "membershipNo": "F/04482",
+          "post": null,
+          "sourceRow": 39,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "123",
+          "name": "ENGR. JAHANGIR ALAM",
+          "membershipNo": "F/14230",
+          "post": null,
+          "sourceRow": 39,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "16",
+          "name": "ENGR. GOLAM MOHAMMAD KHAN FARUK",
+          "membershipNo": "F/04984",
+          "post": null,
+          "sourceRow": 40,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "124",
+          "name": "ENGR. MOHAMMAD BADRUL ALAM",
+          "membershipNo": "F/14252",
+          "post": null,
+          "sourceRow": 40,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "21",
+          "name": "DR. ENGR. MD. REAZ HASAN KHONDOKER, PEng.",
+          "membershipNo": "F/05432",
+          "post": null,
+          "sourceRow": 41,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "148",
+          "name": "PROF. DR. ENGR. MAHBUBUR RAZZAQUE",
+          "membershipNo": "F/14708",
+          "post": null,
+          "sourceRow": 41,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "23",
+          "name": "ENGR. MD. LOKMAN MIAH",
+          "membershipNo": "F/05795",
+          "post": null,
+          "sourceRow": 42,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "155",
+          "name": "ENGR. MD. ABDUL HAMID",
+          "membershipNo": "F/15212",
+          "post": null,
+          "sourceRow": 42,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "25",
+          "name": "ENGR. KABIR AHMED",
+          "membershipNo": "F/05991",
+          "post": null,
+          "sourceRow": 43,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "163",
+          "name": "DR. ENGR. ABU BAKR SIDDIQUE",
+          "membershipNo": "F/16267",
+          "post": null,
+          "sourceRow": 43,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "27",
+          "name": "ENGR. MD. YUSUF ALI",
+          "membershipNo": "F/06239",
+          "post": null,
+          "sourceRow": 44,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "164",
+          "name": "ENGR. MD. HASANUZZAMAN SIDDIQUE",
+          "membershipNo": "F/16303",
+          "post": null,
+          "sourceRow": 44,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "28",
+          "name": "ENGR. MD. GOLAM YAZDANI",
+          "membershipNo": "F/06263",
+          "post": null,
+          "sourceRow": 45,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "165",
+          "name": "ENGR. GOLAM MOSTAFA",
+          "membershipNo": "F/16400",
+          "post": null,
+          "sourceRow": 45,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "30",
+          "name": "ENGR. MD. SADEQUR RAHMAN",
+          "membershipNo": "F/06517",
+          "post": null,
+          "sourceRow": 46,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "166",
+          "name": "ENGR. SALIM AHAMAD",
+          "membershipNo": "F/16423",
+          "post": null,
+          "sourceRow": 46,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "36",
+          "name": "DR. ENGR. MD. FARID AHMMED, PEng.",
+          "membershipNo": "F/07011",
+          "post": null,
+          "sourceRow": 47,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "171",
+          "name": "ENGR. MD. DELWAR HOSSAIN, PEng.",
+          "membershipNo": "M/06862",
+          "post": null,
+          "sourceRow": 47,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "43",
+          "name": "ENGR. MD. KAMRUL ISLAM",
+          "membershipNo": "F/07538",
+          "post": null,
+          "sourceRow": 48,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "173",
+          "name": "ENGR. MD. SARWAR ALAM",
+          "membershipNo": "M/12950",
+          "post": null,
+          "sourceRow": 48,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "48",
+          "name": "ENGR. S. M. JAHANGIR ALAM",
+          "membershipNo": "F/07772",
+          "post": null,
+          "sourceRow": 49,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "176",
+          "name": "ENGR. IMTIAZ AHMED",
+          "membershipNo": "M/19917",
+          "post": null,
+          "sourceRow": 49,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "49",
+          "name": "ENGR. MD. HELAL UDDIN TALUKDER",
+          "membershipNo": "F/07775",
+          "post": null,
+          "sourceRow": 50,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "178",
+          "name": "ENGR. MIR MOSHARROF HOSSEN CHOWDHURY",
+          "membershipNo": "M/23270",
+          "post": null,
+          "sourceRow": 50,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "51",
+          "name": "PROF. DR. ENGR. MD. FAKHRUL ISLAM",
+          "membershipNo": "F/07847",
+          "post": null,
+          "sourceRow": 51,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "179",
+          "name": "ENGR. MD. ABIR HOSSAIN",
+          "membershipNo": "M/23753",
+          "post": null,
+          "sourceRow": 51,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "53",
+          "name": "ENGR. MD. MUSA MIA",
+          "membershipNo": "F/07931",
+          "post": null,
+          "sourceRow": 52,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "180",
+          "name": "ENGR. FARHANA CHOWDHURY",
+          "membershipNo": "M/24012",
+          "post": null,
+          "sourceRow": 52,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "57",
+          "name": "ENGR. MD. IDRIS ALI",
+          "membershipNo": "F/08520",
+          "post": null,
+          "sourceRow": 53,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "181",
+          "name": "ENGR. SHAH MD. FAYSAL-BIN-RAHMAN",
+          "membershipNo": "M/24563",
+          "post": null,
+          "sourceRow": 53,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "58",
+          "name": "ENGR. MD. REJAUL KARIM",
+          "membershipNo": "F/08521",
+          "post": null,
+          "sourceRow": 54,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "182",
+          "name": "ENGR. MAHBUBE MOULA MD. MEHEDY HASAN",
+          "membershipNo": "M/24755",
+          "post": null,
+          "sourceRow": 54,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "61",
+          "name": "PROF. DR. ENGR. MD. SHOHIDUL ISLAM TALUKDER, PEng.",
+          "membershipNo": "F/08696",
+          "post": null,
+          "sourceRow": 55,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "189",
+          "name": "ENGR. MD. SADDAM HOSSEN",
+          "membershipNo": "M/39090",
+          "post": null,
+          "sourceRow": 55,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "62",
+          "name": "ENGR. MD. BASHIR HOSSAIN",
+          "membershipNo": "F/08700",
+          "post": null,
+          "sourceRow": 56,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "193",
+          "name": "ENGR. MOHAMMAD ABUL HOSSEN (TUHIN)",
+          "membershipNo": "M/22370",
+          "post": null,
+          "sourceRow": 56,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "63",
+          "name": "ENGR. MD. ALIM UL BAHAR (RIPON)",
+          "membershipNo": "F/08740",
+          "post": null,
+          "sourceRow": 57,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "199",
+          "name": "ENGR. ASIF HOSSAIN",
+          "membershipNo": "M/44741",
+          "post": null,
+          "sourceRow": 57,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "67",
+          "name": "DR. ENGR. MD. SHAFIQUL ISLAM",
+          "membershipNo": "F/09322",
+          "post": null,
+          "sourceRow": 58,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "205",
+          "name": "ENGR. MD. MAHMUDUR RAHMAN",
+          "membershipNo": "M/46706",
+          "post": null,
+          "sourceRow": 58,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "68",
+          "name": "ENGR. MD. MOFIZUR RAHMAN",
+          "membershipNo": "F/09506",
+          "post": null,
+          "sourceRow": 59,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "207",
+          "name": "ENGR. M. WALI ULLAH",
+          "membershipNo": "M/48687",
+          "post": null,
+          "sourceRow": 59,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "70",
+          "name": "PROF. DR. ENGR. MD. JAHANGIR ALAM",
+          "membershipNo": "F/09804",
+          "post": null,
+          "sourceRow": 60,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "208",
+          "name": "DR. ENGR. NADIM CHOWDHURY",
+          "membershipNo": "M/48838",
+          "post": null,
+          "sourceRow": 60,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "72",
+          "name": "ENGR. S.M. FARHAD HOSSAIN",
+          "membershipNo": "F/09894",
+          "post": null,
+          "sourceRow": 61,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "209",
+          "name": "ENGR. SHAMPA BASU",
+          "membershipNo": "M/49282",
+          "post": null,
+          "sourceRow": 61,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "73",
+          "name": "ENGR. S. M. SIRAJUL ISLAM",
+          "membershipNo": "F/09965",
+          "post": null,
+          "sourceRow": 62,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "210",
+          "name": "DR. ENGR. TAKIAN FAKHRUL",
+          "membershipNo": "M/49376",
+          "post": null,
+          "sourceRow": 62,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "74",
+          "name": "ENGR. MD. FORHAD ZAMAN",
+          "membershipNo": "F/09969",
+          "post": null,
+          "sourceRow": 63,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "212",
+          "name": "ENGR. MORSHED ALAM MD. IMRAN HABIB",
+          "membershipNo": "M/50530",
+          "post": null,
+          "sourceRow": 63,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "78",
+          "name": "ENGR. MOHAMMAD MOSHARRAF HOSSAIN KHAN",
+          "membershipNo": "F/10103",
+          "post": null,
+          "sourceRow": 64,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "216",
+          "name": "ENGR. ALI AMMAR MOWAZ",
+          "membershipNo": "M/54020",
+          "post": null,
+          "sourceRow": 64,
+          "sourceSide": "right"
+        }
+      ]
+    },
+    {
+      "name": "Local Council Member, Dhaka Center",
+      "entries": [
+        {
+          "ballotNo": "7",
+          "name": "DR. ENGR. MD. RAFIQUL ISLAM KHAN",
+          "membershipNo": "F/05861",
+          "post": null,
+          "sourceRow": 68,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "101",
+          "name": "ENGR. SALIM AHAMAD",
+          "membershipNo": "F/16423",
+          "post": null,
+          "sourceRow": 68,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "8",
+          "name": "ENGR. MD. YUSUF ALI",
+          "membershipNo": "F/06239",
+          "post": null,
+          "sourceRow": 69,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "106",
+          "name": "ENGR. MD. SARWAR ALAM",
+          "membershipNo": "M/12950",
+          "post": null,
+          "sourceRow": 69,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "11",
+          "name": "DR. ENGR. MD. FARID AHMMED, PEng.",
+          "membershipNo": "F/07011",
+          "post": null,
+          "sourceRow": 70,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "111",
+          "name": "ENGR. IMTIAZ AHMED",
+          "membershipNo": "M/19917",
+          "post": null,
+          "sourceRow": 70,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "13",
+          "name": "ENGR. MD. ATAUR RAHMAN",
+          "membershipNo": "F/07410",
+          "post": null,
+          "sourceRow": 71,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "136",
+          "name": "ENGR. MD. RIFAT MAHMUD",
+          "membershipNo": "M/41934",
+          "post": null,
+          "sourceRow": 71,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "21",
+          "name": "ENGR. MD. BASHIR HOSSAIN",
+          "membershipNo": "F/08700",
+          "post": null,
+          "sourceRow": 72,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "141",
+          "name": "ENGR. SHAH IKTHIAR ALAM",
+          "membershipNo": "M/44317",
+          "post": null,
+          "sourceRow": 72,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "54",
+          "name": "ENGR. MD. SHAWKAT FERDOUS",
+          "membershipNo": "F/14203",
+          "post": null,
+          "sourceRow": 73,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "146",
+          "name": "ENGR. MD. ABUL HASNAT FERDOUS",
+          "membershipNo": "M/44913",
+          "post": null,
+          "sourceRow": 73,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "58",
+          "name": "ENGR. MOHAMMAD BADRUL ALAM",
+          "membershipNo": "F/14252",
+          "post": null,
+          "sourceRow": 74,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "152",
+          "name": "ENGR. NASIM AHMED",
+          "membershipNo": "M/45492",
+          "post": null,
+          "sourceRow": 74,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "99",
+          "name": "DR. ENGR. ABU BAKR SIDDIQUE",
+          "membershipNo": "F/16267",
+          "post": null,
+          "sourceRow": 75,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "163",
+          "name": "ENGR. MD. MEHRAJUL MAIYAN",
+          "membershipNo": "M/51489",
+          "post": null,
+          "sourceRow": 75,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "100",
+          "name": "ENGR. GALIB IBNA SIDDIQUE",
+          "membershipNo": "F/16270",
+          "post": null,
+          "sourceRow": 76,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "167",
+          "name": "ENGR. ALI AMMAR MOWAZ",
+          "membershipNo": "M/54020",
+          "post": null,
+          "sourceRow": 76,
+          "sourceSide": "right"
+        }
+      ]
+    },
+    {
+      "name": "Civil Engineering Division - Member",
+      "entries": [
+        {
+          "ballotNo": "1",
+          "post": "Member",
+          "name": "DR. ENGR. MD. RAFIQUL ISLAM KHAN",
+          "membershipNo": "F/05861",
+          "sourceRow": 80,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "36",
+          "post": "Member",
+          "name": "ENGR. FARHANA CHOWDHURY",
+          "membershipNo": "M/24012",
+          "sourceRow": 80,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "2",
+          "post": "Member",
+          "name": "ENGR. MD. YUSUF ALI",
+          "membershipNo": "F/06239",
+          "sourceRow": 81,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "37",
+          "post": "Member",
+          "name": "ENGR. SHAH MD. FAYSAL-BIN-RAHMAN",
+          "membershipNo": "M/24563",
+          "sourceRow": 81,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "7",
+          "post": "Member",
+          "name": "ENGR. MD. BASHIR HOSSAIN",
+          "membershipNo": "F/08700",
+          "sourceRow": 82,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "41",
+          "post": "Member",
+          "name": "ENGR. ASIK KADIR",
+          "membershipNo": "M/28538",
+          "sourceRow": 82,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "15",
+          "post": "Member",
+          "name": "ENGR. MD. IQBAL HOSSAIN",
+          "membershipNo": "F/11548",
+          "sourceRow": 83,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "58",
+          "post": "Member",
+          "name": "ENGR. ASIF HOSSAIN",
+          "membershipNo": "M/44741",
+          "sourceRow": 83,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "22",
+          "post": "Member",
+          "name": "PROF. DR. ENGR. ARMANA SABIHA HUQ",
+          "membershipNo": "F/13814",
+          "sourceRow": 84,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "63",
+          "post": "Member",
+          "name": "ENGR. MD. MEHRAJUL MAIYAN",
+          "membershipNo": "M/51489",
+          "sourceRow": 84,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "34",
+          "post": "Member",
+          "name": "ENGR. GALIB IBNA SIDDIQUE",
+          "membershipNo": "F/16270",
+          "sourceRow": 85,
+          "sourceSide": "left"
+        }
+      ]
+    },
+    {
+      "name": "Electrical Engineering Division - Member",
+      "entries": [
+        {
+          "ballotNo": "3",
+          "post": "Member",
+          "name": "DR. ENGR. MD. FARID AHMMED, PEng.",
+          "membershipNo": "F/07011",
+          "sourceRow": 89,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "42",
+          "post": "Member",
+          "name": "ENGR. MD. ABUL HASNAT FERDOUS",
+          "membershipNo": "M/44913",
+          "sourceRow": 89,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "32",
+          "post": "Member",
+          "name": "ENGR. IMTIAZ AHMED",
+          "membershipNo": "M/19917",
+          "sourceRow": 90,
+          "sourceSide": "left"
+        }
+      ]
+    },
+    {
+      "name": "Mechanical Engineering Division - Member",
+      "entries": [
+        {
+          "ballotNo": "3",
+          "post": "Member",
+          "name": "ENGR. MD. KHAIRUZZAMAN CHOWDHURY",
+          "membershipNo": "F/07354",
+          "sourceRow": 94,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "38",
+          "post": "Member",
+          "name": "ENGR. MD. ABDUL BARI",
+          "membershipNo": "M/30098",
+          "sourceRow": 94,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "7",
+          "post": "Member",
+          "name": "ENGR. MD. TAZUL ISLAM",
+          "membershipNo": "F/10747",
+          "sourceRow": 95,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "45",
+          "post": "Member",
+          "name": "ENGR. SHAH IKTHIAR ALAM",
+          "membershipNo": "M/44317",
+          "sourceRow": 95,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "28",
+          "post": "Member",
+          "name": "ENGR. MD. RAIHAN NOBI KHAN",
+          "membershipNo": "F/16200",
+          "sourceRow": 96,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "52",
+          "post": "Member",
+          "name": "ENGR. NASIM AHMED",
+          "membershipNo": "M/45492",
+          "sourceRow": 96,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "29",
+          "post": "Member",
+          "name": "DR. ENGR. ABU BAKR SIDDIQUE",
+          "membershipNo": "F/16267",
+          "sourceRow": 97,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "57",
+          "post": "Member",
+          "name": "ENGR. AL ARAFAT HOSSAIN",
+          "membershipNo": "M/46692",
+          "sourceRow": 97,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "37",
+          "post": "Member",
+          "name": "ENGR. MD. SADEQUR RAHMAN",
+          "membershipNo": "M/24579",
+          "sourceRow": 98,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "58",
+          "post": "Member",
+          "name": "ENGR. MD. JUBAIR LIKHON",
+          "membershipNo": "M/46996",
+          "sourceRow": 98,
+          "sourceSide": "right"
+        }
+      ]
+    },
+    {
+      "name": "Chemical Engineering Division - Member",
+      "entries": [
+        {
+          "ballotNo": "1",
+          "post": "Member",
+          "name": "ENGR. MOSTOFA JAKIR AHAMMAD",
+          "membershipNo": "F/14348",
+          "sourceRow": 102,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "7",
+          "post": "Member",
+          "name": "ENGR. MD. RAFIKUL ISLAM",
+          "membershipNo": "M/45304",
+          "sourceRow": 102,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "2",
+          "post": "Member",
+          "name": "ENGR. MD. RAJIB HASAN",
+          "membershipNo": "F/14568",
+          "sourceRow": 103,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "8",
+          "post": "Member",
+          "name": "ENGR. TANIA AFRIN",
+          "membershipNo": "M/45912",
+          "sourceRow": 103,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "5",
+          "post": "Member",
+          "name": "ENGR. MD. RIFAT MAHMUD",
+          "membershipNo": "M/41934",
+          "sourceRow": 104,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "9",
+          "post": "Member",
+          "name": "ENGR. MD. ABDUR RAKIB",
+          "membershipNo": "M/50513",
+          "sourceRow": 104,
+          "sourceSide": "right"
+        }
+      ]
+    },
+    {
+      "name": "Computer Engineering Division - Member",
+      "entries": [
+        {
+          "ballotNo": "11",
+          "post": "Member",
+          "name": "ENGR. MD. SAIMUM RAHMAN SAJIB",
+          "membershipNo": "F/01481",
+          "sourceRow": 108,
+          "sourceSide": "left"
+        }
+      ]
+    },
+    {
+      "name": "Women Engineers Chapter - Member",
+      "entries": [
+        {
+          "ballotNo": "1",
+          "post": "Member",
+          "name": "PROF. DR. ENGR. ARMANA SABIHA HUQ",
+          "membershipNo": "F/13814",
+          "sourceRow": 112,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "8",
+          "post": "Member",
+          "name": "ENGR. SHAMPA BASU",
+          "membershipNo": "M/49282",
+          "sourceRow": 112,
+          "sourceSide": "right"
+        },
+        {
+          "ballotNo": "7",
+          "post": "Member",
+          "name": "ENGR. TANIA AFRIN",
+          "membershipNo": "M/45912",
+          "sourceRow": 113,
+          "sourceSide": "left"
+        }
+      ]
+    },
+    {
+      "name": "Young Engineers Chapter - Member",
+      "entries": [
+        {
+          "ballotNo": "8",
+          "post": "Member",
+          "name": "ENGR. TANIA AFRIN",
+          "membershipNo": "M/45912",
+          "sourceRow": 117,
+          "sourceSide": "left"
+        },
+        {
+          "ballotNo": "20",
+          "post": "Member",
+          "name": "ENGR. ALI AMMAR MOWAZ",
+          "membershipNo": "M/54020",
+          "sourceRow": 117,
+          "sourceSide": "right"
+        }
+      ]
+    }
+  ]
+}

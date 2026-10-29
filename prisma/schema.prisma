@@ -1,0 +1,164 @@
+// Database schema for the Vote 4 BUETian campaign site.
+//
+// SQLite is used for single-server deployments. To move to PostgreSQL, change
+// `provider` to "postgresql", point DATABASE_URL at the server, delete the
+// prisma/migrations folder and run `npx prisma migrate dev --name init`, then
+// re-add the CHECK constraints from the SQLite migration (see README).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// A ballot section, e.g. "Headquarters Executive" or "Central Council Member from Dhaka Center".
+model PositionGroup {
+  id           Int        @id @default(autoincrement())
+  name         String     @unique
+  slug         String     @unique
+  displayOrder Int
+  positions    Position[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+/// An office contested within a group, e.g. "President" in "Headquarters Executive".
+model Position {
+  id           Int           @id @default(autoincrement())
+  groupId      Int
+  group        PositionGroup @relation(fields: [groupId], references: [id], onDelete: Restrict)
+  name         String
+  slug         String        @unique
+  displayOrder Int
+  candidacies  Candidacy[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@unique([groupId, name])
+  @@index([groupId, displayOrder])
+}
+
+/// One person. A candidate may contest several positions (see Candidacy).
+model Candidate {
+  id                     String      @id @default(cuid())
+  slug                   String      @unique
+  fullName               String
+  /// IEB membership number exactly as published, e.g. "F/04266" or "M/24563".
+  membershipNo           String?     @unique
+  education              String?
+  designation            String?
+  organization           String?
+  professionalExperience String?
+  institutionalRoles     String?
+  achievements           String?
+  contributions          String?
+  additionalInfo         String?
+  manifesto              String?
+  manifestoUpdatedAt     DateTime?
+  /// Base name of the processed photo files in UPLOAD_DIR/candidates (null = placeholder).
+  photoKey               String?
+  isPublished            Boolean     @default(true)
+  /// Internal notes about source-data issues. Never shown publicly.
+  dataNotes              String?
+  candidacies            Candidacy[]
+  comments               Comment[]
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+
+  @@index([fullName])
+}
+
+/// A candidate's entry on the ballot for one position.
+model Candidacy {
+  id          Int       @id @default(autoincrement())
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  positionId  Int
+  position    Position  @relation(fields: [positionId], references: [id], onDelete: Restrict)
+  ballotNo    String?
+  /// Name exactly as printed for this entry in the source list.
+  listedName  String
+  /// Where this entry came from, e.g. "xlsx row 6 (left)" or "admin".
+  source      String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([candidateId, positionId])
+  @@unique([positionId, ballotNo])
+  @@index([positionId])
+}
+
+/// Voter feedback. Status is constrained to pending/approved/rejected in the migration,
+/// and anonymous comments may not carry a display name (CHECK constraints).
+model Comment {
+  id            String    @id @default(cuid())
+  candidateId   String
+  candidate     Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  /// Null whenever isAnonymous is true: the name is never stored for anonymous comments.
+  displayName   String?
+  isAnonymous   Boolean
+  body          String
+  status        String    @default("pending")
+  /// sha256 of candidate + normalised body, used to reject duplicate submissions.
+  contentHash   String
+  /// HMAC of the submitter's IP, used only for rate limiting. Never displayed.
+  ipHash        String?
+  createdAt     DateTime  @default(now())
+  moderatedAt   DateTime?
+  moderatedById String?
+  moderatedBy   Admin?    @relation(fields: [moderatedById], references: [id], onDelete: SetNull)
+
+  @@index([candidateId, status, createdAt])
+  @@index([status, createdAt])
+  @@index([ipHash, createdAt])
+  @@index([contentHash])
+}
+
+model Admin {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  passwordHash String
+  /// "admin" (full access) or "moderator" (comment moderation only). CHECK-constrained.
+  role         String     @default("admin")
+  lastLoginAt  DateTime?
+  sessions     Session[]
+  moderated    Comment[]
+  auditLogs    AuditLog[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Session {
+  /// sha256 of the session token; the raw token only ever lives in the cookie.
+  id        String   @id
+  adminId   String
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([adminId])
+  @@index([expiresAt])
+}
+
+/// Editable site-wide text (campaign vision, about text). Empty values are not rendered.
+model SiteContent {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  adminId   String?
+  admin     Admin?   @relation(fields: [adminId], references: [id], onDelete: SetNull)
+  action    String
+  target    String?
+  detail    String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

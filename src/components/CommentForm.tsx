@@ -1,7 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { postComment, type CommentFormState } from "@/app/(site)/candidates/[slug]/actions";
+import { EASE, Emoji } from "./motion";
 import { SubmitButton } from "./SubmitButton";
 
 const BODY_MAX = 1500;
@@ -29,15 +31,29 @@ export function CommentForm({ candidateId, candidateName, token }: { candidateId
     <form action={action} noValidate className="space-y-5" aria-describedby="comment-policy">
       <div ref={statusRef} tabIndex={-1} aria-live="polite" className="outline-none">
         {state.status === "success" && (
-          <p role="status" className="rounded-[var(--radius-md)] border border-ok bg-ok-soft px-4 py-3 text-ink">
-            Thank you for your feedback. Your comment has been submitted for review and will appear after administrator
-            approval.
-          </p>
+          <motion.p
+            key={`ok-${state.attempt}`}
+            role="status"
+            className="rounded-[var(--radius-md)] border border-ok bg-ok-soft px-4 py-3 text-ink"
+            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.35, ease: EASE }}
+          >
+            <Emoji>🙏</Emoji> Thank you for your feedback. Your comment has been submitted for review and will appear
+            after administrator approval.
+          </motion.p>
         )}
         {state.status === "error" && state.message && (
-          <p role="alert" className="rounded-[var(--radius-md)] border border-brand bg-brand-soft px-4 py-3 text-brand-strong">
+          <motion.p
+            key={`err-${state.attempt}`}
+            role="alert"
+            className="rounded-[var(--radius-md)] border border-brand bg-brand-soft px-4 py-3 text-brand-strong"
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+          >
             {state.message}
-          </p>
+          </motion.p>
         )}
       </div>
 

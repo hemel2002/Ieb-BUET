@@ -12,11 +12,13 @@ export function LogoMark({ size = 36 }: { size?: number }) {
 
 export function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-3 rounded-md">
-      <LogoMark />
-      <span className="flex flex-col leading-tight">
-        <span className="font-serif text-lg font-semibold text-ink">Vote 4 BUETian</span>
-        <span className="text-sm text-ink-muted">IEB Election 2027-2028</span>
+    <Link href="/" className="group flex min-w-0 items-center gap-2.5 rounded-md sm:gap-3">
+      <span className="shrink-0 transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:scale-105">
+        <LogoMark />
+      </span>
+      <span className="flex min-w-0 flex-col leading-tight">
+        <span className="font-serif text-[1.0625rem] font-semibold text-ink sm:text-lg">BUETians in IEB Election</span>
+        <span className="text-sm text-ink-muted">2027-2028</span>
       </span>
     </Link>
   );

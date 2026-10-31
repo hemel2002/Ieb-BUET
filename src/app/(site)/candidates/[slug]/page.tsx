@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { CandidatePhoto } from "@/components/CandidatePhoto";
 import { CommentForm } from "@/components/CommentForm";
+import { Emoji, Reveal, StaggerItem, StaggerList } from "@/components/motion";
 import { RichText } from "@/components/RichText";
 import { positionContext, positionTitle, publishedCandidate } from "@/lib/candidates";
 import { approvedComments, issueFormToken } from "@/lib/comments";
@@ -49,7 +50,7 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
   ];
 
   return (
-    <article className="container-site py-10">
+    <article className="container-site py-8 sm:py-10">
       <nav aria-label="Breadcrumb" className="text-[0.9375rem] text-ink-muted">
         <ol className="flex flex-wrap gap-2">
           <li><Link href="/candidates" className="link">Candidates</Link></li>
@@ -59,16 +60,18 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
       </nav>
 
       {/* 1. Overview */}
-      <header className="mt-6 grid gap-8 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] md:gap-12 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)]">
-        <CandidatePhoto
-          photoKey={candidate.photoKey}
-          name={candidate.fullName}
-          sizes="(min-width: 768px) 272px, 60vw"
-          priority
-          className="w-full max-w-[15rem] rounded-[var(--radius-lg)] border border-line md:max-w-none"
-        />
-        <div className="min-w-0">
-          <h1 className="text-[2rem] sm:text-[2.5rem]">{candidate.fullName}</h1>
+      <header className="mt-6 grid gap-6 sm:gap-8 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] md:gap-12 lg:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] xl:grid-cols-[minmax(0,19rem)_minmax(0,1fr)] xl:gap-14">
+        <Reveal immediate x={-20} y={0}>
+          <CandidatePhoto
+            photoKey={candidate.photoKey}
+            name={candidate.fullName}
+            sizes="(min-width: 1280px) 304px, (min-width: 768px) 272px, 60vw"
+            priority
+            className="w-full max-w-[15rem] rounded-[var(--radius-lg)] border border-line md:max-w-none"
+          />
+        </Reveal>
+        <Reveal immediate delay={0.08} className="min-w-0">
+          <h1 className="text-[clamp(1.75rem,1.3rem+2vw,3rem)] leading-[1.12]">{candidate.fullName}</h1>
           {listedVariants.length > 0 && (
             <p className="mt-2 text-[0.9375rem] text-ink-muted">
               Also listed as {listedVariants.map((n, i) => <span key={n}>{i > 0 && " / "}{n}</span>)}
@@ -103,17 +106,18 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
           </dl>
 
           <nav aria-label="On this page" className="mt-8 flex flex-wrap gap-2">
-            <a href="#background" className="btn btn-secondary btn-sm">Background</a>
-            <a href="#manifesto" className="btn btn-secondary btn-sm">Manifesto</a>
-            <a href="#comments" className="btn btn-secondary btn-sm">Comments ({comments.length})</a>
+            <a href="#background" className="btn btn-secondary btn-sm"><Emoji>🎓</Emoji> Background</a>
+            <a href="#manifesto" className="btn btn-secondary btn-sm"><Emoji>📜</Emoji> Manifesto</a>
+            <a href="#comments" className="btn btn-secondary btn-sm"><Emoji>💬</Emoji> Comments ({comments.length})</a>
           </nav>
-        </div>
+        </Reveal>
       </header>
 
-      <div className="mt-16 max-w-[48rem] space-y-16">
+      <div className="mt-12 max-w-[48rem] space-y-12 sm:mt-16 sm:space-y-16">
         {/* 2. Background */}
+        <Reveal>
         <section id="background" aria-labelledby="background-heading" className="scroll-mt-6">
-          <h2 id="background-heading" className="border-b-2 border-brand pb-2 text-[1.625rem]">Background</h2>
+          <h2 id="background-heading" className="title-section border-b-2 border-brand pb-2">Background</h2>
           <div className="mt-6 space-y-8">
             {background.length === 0 ? (
               <NotProvided>Background information for this candidate has not been provided yet.</NotProvided>
@@ -127,10 +131,12 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
             )}
           </div>
         </section>
+        </Reveal>
 
         {/* 3. Manifesto */}
+        <Reveal>
         <section id="manifesto" aria-labelledby="manifesto-heading" className="scroll-mt-6">
-          <h2 id="manifesto-heading" className="border-b-2 border-brand pb-2 text-[1.625rem]">Manifesto</h2>
+          <h2 id="manifesto-heading" className="title-section border-b-2 border-brand pb-2">Manifesto</h2>
           <div className="mt-6">
             {candidate.manifesto?.trim() ? (
               <>
@@ -144,16 +150,19 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
             )}
           </div>
         </section>
+        </Reveal>
 
         {/* 4. Comments */}
         <section id="comments" aria-labelledby="comments-heading" className="scroll-mt-6">
-          <h2 id="comments-heading" className="border-b-2 border-brand pb-2 text-[1.625rem]">Voter comments</h2>
+          <Reveal>
+            <h2 id="comments-heading" className="title-section border-b-2 border-brand pb-2">Voter comments</h2>
+          </Reveal>
           {comments.length === 0 ? (
             <p className="mt-6 text-ink-muted">No comments have been published for this candidate yet.</p>
           ) : (
-            <ol className="mt-6 space-y-4">
+            <StaggerList as="ol" className="mt-6 space-y-4">
               {comments.map((c) => (
-                <li key={c.id} className="rounded-[var(--radius-lg)] border border-line p-5">
+                <StaggerItem key={c.id} className="rounded-[var(--radius-lg)] border border-line p-4 sm:p-5">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                     <p className={`font-semibold ${c.author === "Anonymous" ? "text-ink-muted" : ""}`}>{c.author}</p>
                     <p className="text-sm text-ink-muted">
@@ -161,17 +170,17 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
                     </p>
                   </div>
                   <p className="mt-2 whitespace-pre-line [overflow-wrap:anywhere]">{c.body}</p>
-                </li>
+                </StaggerItem>
               ))}
-            </ol>
+            </StaggerList>
           )}
 
-          <div className="mt-10 rounded-[var(--radius-lg)] border border-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-7">
+          <Reveal className="mt-10 rounded-[var(--radius-lg)] border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-7">
             <h3 className="text-[1.25rem]">Leave a comment</h3>
             <div className="mt-5">
               <CommentForm candidateId={candidate.id} candidateName={candidate.fullName} token={issueFormToken()} />
             </div>
-          </div>
+          </Reveal>
         </section>
       </div>
     </article>

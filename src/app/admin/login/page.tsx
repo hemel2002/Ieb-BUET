@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ActionForm, Field } from "@/components/admin/ActionForm";
 import { LogoMark } from "@/components/Logo";
+import { Reveal } from "@/components/motion";
 import { SubmitButton } from "@/components/SubmitButton";
 import { currentAdmin } from "@/lib/auth";
 import { login } from "../actions";
@@ -11,11 +12,11 @@ export const metadata: Metadata = { title: "Administrator sign in", robots: { in
 export default async function LoginPage() {
   if (await currentAdmin()) redirect("/admin");
   return (
-    <main id="main" className="flex min-h-screen items-center justify-center bg-canvas px-4 py-12">
-      <div className="w-full max-w-sm rounded-[var(--radius-lg)] border border-line bg-surface p-7 shadow-[var(--shadow-card)]">
+    <main id="main" className="flex min-h-dvh items-center justify-center bg-canvas px-4 py-10 sm:py-12">
+      <Reveal immediate className="w-full max-w-sm rounded-[var(--radius-lg)] border border-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-7">
         <div className="flex items-center gap-3">
           <LogoMark size={32} />
-          <span className="font-serif text-lg font-semibold">Vote 4 BUETian</span>
+          <span className="font-serif text-lg font-semibold">BUETians in IEB Election</span>
         </div>
         <h1 className="mt-6 text-[1.5rem]">Administrator sign in</h1>
         <div className="mt-6">
@@ -26,7 +27,7 @@ export default async function LoginPage() {
           </ActionForm>
         </div>
         <p className="mt-6 text-sm text-ink-muted"><a href="/" className="link">Return to the public site</a></p>
-      </div>
+      </Reveal>
     </main>
   );
 }

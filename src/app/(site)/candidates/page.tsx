@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { AutoSubmitSelect } from "@/components/AutoSubmitSelect";
 import { CandidateCard } from "@/components/CandidateCard";
+import { Emoji, Float, Reveal, StaggerItem, StaggerList } from "@/components/motion";
 import { ballot } from "@/lib/candidates";
 import { plural } from "@/lib/format";
 
@@ -38,13 +39,16 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/candi
   const isFiltered = Boolean(q || position);
 
   return (
-    <div className="container-site py-12">
-      <h1 className="text-[2.25rem] sm:text-[2.75rem]">Candidates</h1>
-      <p className="mt-3 max-w-[var(--container-prose)] text-ink-muted">
-        Candidates are listed by ballot section and post, in ballot-number order. Several candidates contest more than
-        one post and appear under each.
-      </p>
+    <div className="container-site py-10 sm:py-12">
+      <Reveal immediate>
+        <h1 className="title-page">Candidates</h1>
+        <p className="mt-3 max-w-[var(--container-prose)] text-ink-muted">
+          Candidates are listed by ballot section and post, in ballot-number order. Several candidates contest more than
+          one post and appear under each.
+        </p>
+      </Reveal>
 
+      <Reveal immediate delay={0.08}>
       <form role="search" action="/candidates" className="mt-8 grid gap-4 rounded-[var(--radius-lg)] border border-line bg-canvas p-4 sm:p-5 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_auto] md:items-end">
         <div>
           <label htmlFor="q" className="field-label">Search by name or membership number</label>
@@ -68,11 +72,12 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/candi
             )}
           </AutoSubmitSelect>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 [&>*]:flex-1 md:[&>*]:flex-none">
           <button type="submit" className="btn btn-primary">Search</button>
           {isFiltered && <Link href="/candidates" className="btn btn-secondary">Clear</Link>}
         </div>
       </form>
+      </Reveal>
 
       <p className="mt-6 text-[0.9375rem] text-ink-muted" aria-live="polite">
         {entryCount === 0
@@ -81,34 +86,39 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/candi
       </p>
 
       {entryCount === 0 ? (
-        <div className="mt-6 rounded-[var(--radius-lg)] border border-dashed border-line-strong px-6 py-12 text-center">
-          <h2 className="font-sans text-[1.125rem] font-semibold">No candidates match your search</h2>
+        <Reveal className="mt-6 rounded-[var(--radius-lg)] border border-dashed border-line-strong px-6 py-12 text-center">
+          <Float className="text-[2rem]"><Emoji>🔍</Emoji></Float>
+          <h2 className="mt-2 font-sans text-[1.125rem] font-semibold">No candidates match your search</h2>
           <p className="mt-2 text-ink-muted">Check the spelling, try part of the name, or search all positions.</p>
           <Link href="/candidates" className="btn btn-secondary mt-5">Show all candidates</Link>
-        </div>
+        </Reveal>
       ) : (
-        <div className="mt-4 space-y-14">
+        <div className="mt-4 space-y-12 sm:space-y-14">
           {filtered.map((g) => (
             <section key={g.id} aria-labelledby={`group-${g.slug}`}>
-              <h2 id={`group-${g.slug}`} className="border-b-2 border-brand pb-2 text-[1.5rem] sm:text-[1.75rem]">
-                {g.name}
-              </h2>
+              <Reveal>
+                <h2 id={`group-${g.slug}`} className="title-section border-b-2 border-brand pb-2">
+                  {g.name}
+                </h2>
+              </Reveal>
               <div className="mt-6 space-y-10">
                 {g.positions.map((p) => (
                   <div key={p.id}>
                     {(g.positions.length > 1 || p.title !== g.name) && (
-                      <h3 className="mb-4 font-sans text-[1.125rem] font-semibold">
-                        {p.title}
-                        <span className="ml-2 font-normal text-ink-muted">({p.entries.length})</span>
-                      </h3>
+                      <Reveal>
+                        <h3 className="mb-4 font-sans text-[1.125rem] font-semibold">
+                          {p.title}
+                          <span className="ml-2 font-normal text-ink-muted">({p.entries.length})</span>
+                        </h3>
+                      </Reveal>
                     )}
-                    <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <StaggerList className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
                       {p.entries.map((e) => (
-                        <li key={e.candidacyId}>
+                        <StaggerItem key={e.candidacyId} lift>
                           <CandidateCard {...e.candidate} ballotNo={e.ballotNo} />
-                        </li>
+                        </StaggerItem>
                       ))}
-                    </ul>
+                    </StaggerList>
                   </div>
                 ))}
               </div>

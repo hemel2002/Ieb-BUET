@@ -16,7 +16,8 @@
     "test": "tsx --test tests/*.test.ts",
     "data:verify": "tsx scripts/verify-import.ts",
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && prisma migrate deploy && tsx prisma/seed.ts --if-empty && next build"
+    "vercel-build": "prisma generate && node scripts/deploy-db.mjs && next build",
+    "test:e2e": "tsx --test --test-concurrency=1 tests/e2e/*.e2e.test.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

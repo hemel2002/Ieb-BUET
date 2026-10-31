@@ -5,7 +5,7 @@
  *
  * The password is read from the ADMIN_PASSWORD environment variable if set, otherwise
  * it is prompted for (input hidden). Re-running for an existing email resets the
- * password and role and signs out that account's sessions.
+ * password and role, signs out that account's sessions and clears its sign-in lockout.
  */
 import { createInterface } from "node:readline";
 import { parseArgs } from "node:util";
@@ -44,6 +44,8 @@ async function main() {
     const passwordHash = await hashPassword(password);
     const name = values.name?.trim() || email.split("@")[0];
     const existing = await db.admin.findUnique({ where: { email } });
+    // Also lift any sign-in lockout on this address, so an operator can unlock a blocked owner.
+    await db.loginAttempt.deleteMany({ where: { key: `email:${email}` } });
     if (existing) {
       await db.admin.update({ where: { email }, data: { passwordHash, role, ...(values.name && { name }) } });
       await db.session.deleteMany({ where: { adminId: existing.id } });

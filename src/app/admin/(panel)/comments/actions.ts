@@ -20,7 +20,7 @@ export async function moderateComment(fd: FormData) {
       await audit(admin.id, "comment.delete", id);
       log("info", "comment.deleted", { commentId: id, adminId: admin.id });
     }
-  } else if (op in OPS) {
+  } else if (Object.hasOwn(OPS, op)) {
     const status = OPS[op as keyof typeof OPS];
     const { count } = await db.comment.updateMany({
       where: { id },

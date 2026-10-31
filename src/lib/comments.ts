@@ -1,5 +1,5 @@
 import "server-only";
-import { createHash } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 import { db } from "./db";
 import { log } from "./log";
@@ -35,7 +35,11 @@ export function issueFormToken(): string {
 
 function checkFormToken(token: string): string | null {
   const [ts, sig] = token.split(".");
-  if (!ts || !sig || sig !== hmac("comment-form", ts)) return "Your form has expired. Please reload the page and try again.";
+  const expected = ts ? Buffer.from(hmac("comment-form", ts)) : null;
+  const given = Buffer.from(sig ?? "");
+  if (!expected || given.length !== expected.length || !timingSafeEqual(given, expected)) {
+    return "Your form has expired. Please reload the page and try again.";
+  }
   const age = Date.now() - Number(ts);
   if (age > MAX_TOKEN_AGE_MS) return "Your form has expired. Please reload the page and try again.";
   if (age < MIN_FILL_MS) return "That was very fast. Please wait a moment and submit again.";
@@ -112,28 +116,44 @@ export async function submitComment(input: SubmitInput): Promise<SubmitResult> {
     return { ok: false, message: "Please correct the highlighted fields.", fieldErrors };
   }
 
-  for (const { windowMs, max } of LIMITS) {
-    const recent = await db.comment.count({
-      where: { ipHash, createdAt: { gt: new Date(Date.now() - windowMs) } },
-    });
-    if (recent >= max) {
-      log("warn", "comment.rate_limited", { ipHash: ipHash.slice(0, 12), windowMs });
-      return { ok: false, message: "You have submitted several comments recently. Please try again later." };
-    }
-  }
-
   const contentHash = createHash("sha256")
     .update(`${candidate.id}\n${body.data.toLowerCase().replace(/\s+/g, " ")}`)
     .digest("hex");
-  if (await db.comment.findFirst({ where: { contentHash }, select: { id: true } })) {
-    return { ok: false, message: "This comment has already been submitted for this candidate." };
+
+  // The quota check and insert run in one transaction holding a per-client advisory lock,
+  // so parallel submissions from one address are counted against each other.
+  type Outcome = { kind: "ok"; id: string } | { kind: "limited"; windowMs: number } | { kind: "duplicate" };
+  let outcome: Outcome;
+  try {
+    outcome = await db.$transaction(
+      async (tx): Promise<Outcome> => {
+        await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${ipHash}))`;
+        for (const { windowMs, max } of LIMITS) {
+          const recent = await tx.comment.count({ where: { ipHash, createdAt: { gt: new Date(Date.now() - windowMs) } } });
+          if (recent >= max) return { kind: "limited", windowMs };
+        }
+        if (await tx.comment.findFirst({ where: { contentHash }, select: { id: true } })) return { kind: "duplicate" };
+        const comment = await tx.comment.create({
+          data: { candidateId: candidate.id, isAnonymous, displayName, body: body.data, contentHash, ipHash, status: "pending" },
+          select: { id: true },
+        });
+        return { kind: "ok", id: comment.id };
+      },
+      { maxWait: 5_000, timeout: 10_000 },
+    );
+  } catch (error) {
+    log("warn", "comment.transaction_failed", { ipHash: ipHash.slice(0, 12), error: String(error) });
+    return { ok: false, message: "Your comment could not be saved right now. Please try again in a moment." };
   }
 
-  const comment = await db.comment.create({
-    data: { candidateId: candidate.id, isAnonymous, displayName, body: body.data, contentHash, ipHash, status: "pending" },
-    select: { id: true },
-  });
-  log("info", "comment.submitted", { commentId: comment.id, candidateId: candidate.id });
+  if (outcome.kind === "limited") {
+    log("warn", "comment.rate_limited", { ipHash: ipHash.slice(0, 12), windowMs: outcome.windowMs });
+    return { ok: false, message: "You have submitted several comments recently. Please try again later." };
+  }
+  if (outcome.kind === "duplicate") {
+    return { ok: false, message: "This comment has already been submitted for this candidate." };
+  }
+  log("info", "comment.submitted", { commentId: outcome.id, candidateId: candidate.id });
   return { ok: true };
 }
 

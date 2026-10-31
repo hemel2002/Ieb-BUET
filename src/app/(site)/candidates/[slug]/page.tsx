@@ -157,7 +157,7 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
                   <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                     <p className={`font-semibold ${c.author === "Anonymous" ? "text-ink-muted" : ""}`}>{c.author}</p>
                     <p className="text-sm text-ink-muted">
-                      <time dateTime={c.submittedAt.toISOString()}>{formatDate(c.submittedAt)}</time>
+                      <time dateTime={c.submittedAt.toISOString().slice(0, 10)}>{formatDate(c.submittedAt)}</time>
                     </p>
                   </div>
                   <p className="mt-2 whitespace-pre-line [overflow-wrap:anywhere]">{c.body}</p>

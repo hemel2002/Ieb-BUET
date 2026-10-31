@@ -8,3 +8,6 @@ storage/
 .hallmark/
 .playwright-mcp/
 /BUETian_IEB_Election_Candidates.xlsx
+.vercel
+.env*
+!.env.example

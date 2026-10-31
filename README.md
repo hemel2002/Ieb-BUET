@@ -107,10 +107,13 @@ Other commands:
 
 The repository is ready for Vercel. The `vercel-build` script does the following on every deploy:
 1. generates the Prisma client
-2. applies pending migrations
-3. imports the spreadsheet **only if the database is empty**, so candidates an administrator deleted are not
-   re-imported
-4. builds the site
+2. **on production deployments only** (`VERCEL_ENV=production`), applies pending migrations and imports the
+   spreadsheet **only if the database is empty**, so candidates an administrator deleted are not re-imported
+3. builds the site
+
+Preview deployments (any branch other than `main`) skip step 2, so an unmerged branch can never change the
+production database. If you give Preview its own Neon branch and want migrations there too, set
+`MIGRATE_ON_BUILD=true` for the Preview environment only.
 
 **One-time setup in the Vercel dashboard:**
 
@@ -134,13 +137,17 @@ After that, every push to `main` deploys automatically.
 
 **Notes:**
 - Photo uploads are limited to 4 MB, because Vercel rejects request bodies over 4.5 MB.
-- Preview deployments share the production database unless you give the Preview environment its own Neon branch.
+- Preview deployments **read and write the production database** if the Neon variables are enabled for Preview. To
+  keep Preview data separate, give Preview its own Neon branch, or turn the database and Blob variables off for
+  Preview.
 - If you see `prepared statement "s0" already exists` in the logs, add `&pgbouncer=true` to `DATABASE_URL`.
 
 **Hosting elsewhere instead.** Any Node host with PostgreSQL works:
-1. `npm ci && npm run vercel-build`
+1. `npm ci && npm run db:migrate && npm run build` (or `MIGRATE_ON_BUILD=true npm run vercel-build`)
 2. `npm start`, behind HTTPS
-3. Set `TRUSTED_IP_HEADER` to whatever header your proxy sets with the client IP.
+3. Set `TRUSTED_IP_HEADER` to a header your proxy **overwrites** with the connecting address (for nginx:
+   `proxy_set_header X-Real-IP $remote_addr;` and `TRUSTED_IP_HEADER=x-real-ip`). Never expose `npm start`
+   directly: a client could then set that header itself and dodge the per-IP limits.
 4. Without Blob, set `UPLOAD_DIR` to a persistent directory.
 
 **HTTPS is required in production.** The admin session cookie is marked `Secure`.
@@ -185,7 +192,8 @@ Roles: **admin** has full access. **moderator** can only see Overview, Comments 
 - Spam and abuse controls:
   - a hidden honeypot field
   - a signed form token that rejects submissions made under 3 seconds after page load, and forged tokens
-  - at most 3 comments per 10 minutes and 20 per day per IP, counted in the database
+  - at most 3 comments per 10 minutes and 20 per day per IP, counted in the database inside a transaction that
+    locks per client, so parallel submissions cannot slip past the limit
   - duplicate text for the same candidate is rejected
   - HTML, more than two links, and control or bidi-override characters are rejected or stripped
   - length limits on name and comment
@@ -195,8 +203,13 @@ Roles: **admin** has full access. **moderator** can only see Overview, Comments 
 - Passwords are hashed with scrypt (N=2¹⁷).
 - Sessions use random tokens; only their SHA-256 is stored. Cookies are httpOnly, SameSite=Lax and Secure, with a
   12-hour lifetime. Changing your password signs out your other sessions.
-- Login is rate-limited in the database (5 failed attempts per email and 10 per IP every 15 minutes), and wrong
+- Login is rate-limited in the database: 5 failed attempts per email and 10 per IP every 15 minutes. Each attempt
+  is recorded *before* the password is checked, so a burst of parallel guesses cannot get past the limit. Wrong
   passwords take as long to reject as unknown emails.
+- A browser that has signed in successfully gets a signed "known device" cookie and is limited on its own counter.
+  Strangers guessing at your email can lock out unknown browsers, but not the one you already use.
+- `npm run admin:create -- --email you@example.org` resets a password **and** lifts a sign-in lockout.
+- Guessing the current password on the change-password form is limited too (5 attempts per 15 minutes).
 - **Every admin page and Server Action checks the session and role on the server.** The edge proxy only redirects
   people without a session cookie, as a convenience.
 - Server Actions get Next.js's built-in same-origin check.
@@ -208,6 +221,11 @@ Roles: **admin** has full access. **moderator** can only see Overview, Comments 
 
 - **Automated:**
   - `npm test`: 9 unit tests pass
+  - `npm run test:e2e`: 29 end-to-end tests against a local production build. They cover every spreadsheet entry,
+    comments and moderation, admin security, uploads, and regression tests for the security-audit findings
+    (parallel login guesses, owner lockout, parallel comments, change-password guessing). The suite refuses to run
+    unless `E2E_BASE_URL` and `DATABASE_URL` both point at localhost. Run the server with
+    `TRUSTED_IP_HEADER=x-real-ip`.
   - `npm run data:verify`: 153/153 spreadsheet entries match the database
   - `npm run typecheck` and `npm run build` succeed
 - **Manually in a browser** (desktop 1280 px and phone 375 px; dev and production builds):
@@ -236,3 +254,7 @@ switches on when `BLOB_READ_WRITE_TOKEN` is present; local-disk uploads were tes
 - No email notifications for new comments.
 - New admin accounts are created from the command line (or via `ADMIN_EMAIL`/`ADMIN_PASSWORD` for the first one),
   not from the dashboard.
+
+**Security audit:** a Cloudflare security-audit-skill run (quick profile) confirmed three rate-limit problems.
+All three are fixed and covered by the regression tests above. Two leads depend on Vercel settings; see the Preview
+note in section 4 and `TRUSTED_IP_HEADER` in `.env.example`.

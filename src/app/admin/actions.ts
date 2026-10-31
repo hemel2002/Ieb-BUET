@@ -1,7 +1,10 @@
 "use server";
 
+import { randomBytes, timingSafeEqual } from "node:crypto";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { releaseAttempts, reserveAttempts } from "@/lib/attempts";
 import { audit, createSession, currentAdmin, destroySession, requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { log } from "@/lib/log";
@@ -12,6 +15,22 @@ import { hmac } from "@/lib/secret";
 export type FormState = { error?: string; success?: string; fieldErrors?: Record<string, string> };
 
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const TOO_MANY = "Too many sign-in attempts. Please wait 15 minutes and try again.";
+
+// A browser that has signed in to an account before carries a signed "known device" cookie.
+// Its attempts are limited on their own counter instead of the shared per-email one, so a
+// stranger's failed guesses for an address cannot lock the owner out of their own browser.
+const DEVICE_COOKIE = "ieb_admin_device";
+const DEVICE_MAX_AGE_S = 90 * 24 * 60 * 60;
+const deviceTag = (email: string, nonce: string) => hmac("login-device", `${email}:${nonce}`);
+
+async function knownDevice(email: string): Promise<string | null> {
+  const [nonce, tag] = ((await cookies()).get(DEVICE_COOKIE)?.value ?? "").split(".");
+  if (!nonce || !tag || !/^[0-9a-f]{32}$/.test(nonce)) return null;
+  const expected = Buffer.from(deviceTag(email, nonce));
+  const given = Buffer.from(tag);
+  return given.length === expected.length && timingSafeEqual(given, expected) ? nonce : null;
+}
 
 // Verifying against a dummy hash keeps response time the same for unknown emails.
 let dummyHash: Promise<string> | null = null;
@@ -21,28 +40,47 @@ export async function login(_prev: FormState, fd: FormData): Promise<FormState> 
   const password = String(fd.get("password") ?? "").slice(0, 200);
   if (!email || !password) return { error: "Enter your email and password." };
 
-  // Failed attempts are counted in the database so the limit holds across serverless instances.
-  const keys = { email: `email:${email}`, ip: `ip:${hmac("ip", await clientIp())}` };
-  const since = new Date(Date.now() - LOGIN_WINDOW_MS);
-  const [byEmail, byIp] = await Promise.all(
-    [keys.email, keys.ip].map((key) => db.loginAttempt.count({ where: { key, createdAt: { gt: since } } })),
+  // Attempts are recorded before verifying and counted in the database, so the limits hold
+  // under concurrent requests and across serverless instances.
+  const device = await knownDevice(email);
+  const attempt = await reserveAttempts(
+    [
+      { key: `ip:${hmac("ip", await clientIp())}`, max: 10 },
+      device ? { key: `device:${device}`, max: 10 } : { key: `email:${email}`, max: 5 },
+    ],
+    LOGIN_WINDOW_MS,
   );
-  if (byEmail >= 5 || byIp >= 10) {
-    log("warn", "admin.login_rate_limited", { email });
-    return { error: "Too many sign-in attempts. Please wait 15 minutes and try again." };
+  if (attempt.exceeded) {
+    await releaseAttempts(attempt.ids);
+    log("warn", "admin.login_rate_limited", { email, limit: attempt.exceeded.split(":")[0] });
+    return { error: TOO_MANY };
   }
 
   const admin = await db.admin.findUnique({ where: { email } });
   dummyHash ??= hashPassword("not-a-real-password");
   const valid = await verifyPassword(password, admin?.passwordHash ?? (await dummyHash));
   if (!admin || !valid) {
-    await db.loginAttempt.createMany({ data: [{ key: keys.email }, { key: keys.ip }] });
-    log("warn", "admin.login_failed", { email });
+    // The reserved rows stay as the record of this failure.
+    log("warn", "admin.login_failed", { email, knownDevice: Boolean(device) });
     return { error: "The email or password is incorrect." };
   }
 
   await db.loginAttempt.deleteMany({
-    where: { OR: [{ key: keys.email }, { createdAt: { lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } }] },
+    where: {
+      OR: [
+        { id: { in: attempt.ids } },
+        { key: `email:${email}` },
+        { createdAt: { lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } },
+      ],
+    },
+  });
+  const nonce = device ?? randomBytes(16).toString("hex");
+  (await cookies()).set(DEVICE_COOKIE, `${nonce}.${deviceTag(email, nonce)}`, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/admin",
+    maxAge: DEVICE_MAX_AGE_S,
   });
   await db.admin.update({ where: { id: admin.id }, data: { lastLoginAt: new Date() } });
   await createSession(admin.id);
@@ -72,10 +110,17 @@ export async function changePassword(_prev: FormState, fd: FormData): Promise<Fo
   if (!parsed.success) {
     return { fieldErrors: Object.fromEntries(parsed.error.issues.map((i) => [String(i.path[0]), i.message])) };
   }
+  // Limit guesses at the current password, so a stolen session cannot be used to find it.
+  const attempt = await reserveAttempts([{ key: `password-change:${me.id}`, max: 5 }], LOGIN_WINDOW_MS);
+  if (attempt.exceeded) {
+    await releaseAttempts(attempt.ids);
+    return { error: "Too many attempts. Please wait 15 minutes and try again." };
+  }
   const admin = await db.admin.findUniqueOrThrow({ where: { id: me.id } });
   if (!(await verifyPassword(parsed.data.current, admin.passwordHash))) {
     return { fieldErrors: { current: "Your current password is incorrect." } };
   }
+  await db.loginAttempt.deleteMany({ where: { key: `password-change:${me.id}` } });
   await db.admin.update({ where: { id: me.id }, data: { passwordHash: await hashPassword(parsed.data.next) } });
   // Sign out every other session for this account.
   await db.session.deleteMany({ where: { adminId: me.id } });

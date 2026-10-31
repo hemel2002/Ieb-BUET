@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AutoSubmitSelect } from "@/components/AutoSubmitSelect";
+import { StaggerItem, StaggerList } from "@/components/motion";
 import { SubmitButton } from "@/components/SubmitButton";
 import { requireAdmin } from "@/lib/auth";
 import { COMMENT_STATUSES, isCommentStatus } from "@/lib/comments";
@@ -71,11 +72,11 @@ export default async function CommentsPage({ searchParams }: PageProps<"/admin/c
             </Link>
           ))}
         </nav>
-        <form action="/admin/comments" className="flex items-end gap-2">
+        <form action="/admin/comments" className="flex w-full items-end gap-2 sm:w-auto">
           <input type="hidden" name="status" value={status} />
-          <div>
+          <div className="w-full sm:w-auto">
             <label htmlFor="candidate" className="field-label">Candidate</label>
-            <AutoSubmitSelect id="candidate" name="candidate" defaultValue={candidateId} className="input min-w-[16rem] max-w-[22rem]">
+            <AutoSubmitSelect id="candidate" name="candidate" defaultValue={candidateId} className="input w-full sm:min-w-[16rem] sm:max-w-[22rem]">
               <option value="">All candidates</option>
               {candidates.map((c) => (
                 <option key={c.id} value={c.id}>{c.fullName}{c.membershipNo ? ` (${c.membershipNo})` : ""}</option>
@@ -94,9 +95,9 @@ export default async function CommentsPage({ searchParams }: PageProps<"/admin/c
           <p className="mt-1 text-ink-muted">New submissions appear here as pending.</p>
         </div>
       ) : (
-        <ul className="mt-6 space-y-3">
+        <StaggerList className="mt-6 space-y-3">
           {comments.map((c) => (
-            <li key={c.id} className="rounded-[var(--radius-lg)] border border-line bg-surface p-4 sm:p-5">
+            <StaggerItem key={c.id} className="rounded-[var(--radius-lg)] border border-line bg-surface p-4 sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-[0.9375rem] text-ink-muted">
@@ -130,9 +131,9 @@ export default async function CommentsPage({ searchParams }: PageProps<"/admin/c
                   <SubmitButton size="sm" variant="danger" name="op" value="delete" confirm="Delete this comment permanently?">Delete</SubmitButton>
                 </form>
               </div>
-            </li>
+            </StaggerItem>
           ))}
-        </ul>
+        </StaggerList>
       )}
 
       {pages > 1 && (

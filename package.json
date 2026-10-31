@@ -2,7 +2,7 @@
   "name": "ieb-buet-campaign",
   "version": "1.0.0",
   "private": true,
-  "description": "Vote 4 BUETian: BUET alumni candidates in the IEB Election 2027-2028",
+  "description": "BUETians in IEB Election: BUET alumni candidates in the IEB Election 2027-2028",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -27,6 +27,7 @@
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "@vercel/blob": "^2.8.2",
+    "framer-motion": "^14.9.0",
     "next": "^16.4.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

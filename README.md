@@ -1,4 +1,4 @@
-# Vote 4 BUETian: IEB Election 2027-2028 campaign site
+# BUETians in IEB Election: 2027-2028 campaign site
 
 A website for the BUET alumni candidates in the Institution of Engineers, Bangladesh (IEB) election. Voters can browse
 candidates by ballot section and post, read profiles and manifestos, and leave comments. Comments are published only

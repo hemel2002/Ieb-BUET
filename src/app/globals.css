@@ -31,6 +31,7 @@
   --shadow-lift: 0 4px 14px rgb(37 37 37 / 0.08);
 
   --container-site: 72rem;
+  --container-site-wide: 80rem;
   --container-prose: 42rem;
 }
 
@@ -47,6 +48,30 @@ body {
 
 html {
   scrollbar-color: var(--color-line-strong) var(--color-canvas);
+  scroll-behavior: smooth;
+}
+
+/* Every size in the site is in rem, so scaling the root scales the whole layout.
+   Small phones get slightly smaller type; big monitors and TVs get larger type and a wider page. */
+@media (max-width: 22.5rem) {
+  html {
+    font-size: 93.75%; /* 15px */
+  }
+}
+@media (min-width: 90rem) {
+  html {
+    font-size: 106.25%; /* 17px, 1440px and up */
+  }
+}
+@media (min-width: 120rem) {
+  html {
+    font-size: 112.5%; /* 18px, 1920px and up */
+  }
+}
+@media (min-width: 160rem) {
+  html {
+    font-size: 125%; /* 20px, 2560px and up */
+  }
 }
 
 body {
@@ -90,16 +115,48 @@ body {
 }
 
 @layer components {
+  /* Page column: 16px gutters on phones (never under a notch), 24px on tablets, 32px on laptops,
+     and 80rem wide from 1280px up so large screens are used rather than left empty. */
   .container-site {
     width: 100%;
     max-width: var(--container-site);
     margin-inline: auto;
-    padding-inline: 1rem;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
   }
   @media (min-width: 640px) {
     .container-site {
-      padding-inline: 1.5rem;
+      padding-left: max(1.5rem, env(safe-area-inset-left));
+      padding-right: max(1.5rem, env(safe-area-inset-right));
     }
+  }
+  @media (min-width: 1024px) {
+    .container-site {
+      padding-left: max(2rem, env(safe-area-inset-left));
+      padding-right: max(2rem, env(safe-area-inset-right));
+    }
+  }
+  @media (min-width: 80rem) {
+    .container-site {
+      max-width: var(--container-site-wide);
+    }
+  }
+
+  /* Fluid headings: grow smoothly with the viewport instead of jumping at breakpoints. */
+  .title-page {
+    font-size: clamp(2rem, 1.45rem + 2.4vw, 3.5rem);
+    line-height: 1.1;
+  }
+  .title-section {
+    font-size: clamp(1.375rem, 1.15rem + 0.9vw, 1.875rem);
+  }
+
+  /* Decorative emoji: sized with the text, announced by nothing. */
+  .emoji {
+    display: inline-block;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    font-style: normal;
+    line-height: 1;
   }
 
   .btn {

@@ -1,4 +1,4 @@
-// Database schema for the Vote 4 BUETian campaign site (PostgreSQL, e.g. Neon).
+// Database schema for the BUETians in IEB Election campaign site (PostgreSQL, e.g. Neon).
 //
 // DATABASE_URL is the pooled connection used by the app; DATABASE_URL_UNPOOLED is the
 // direct connection Prisma Migrate needs. The Neon integration on Vercel sets both.

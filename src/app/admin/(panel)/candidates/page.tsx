@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { StaggerItem, StaggerList } from "@/components/motion";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 
@@ -31,11 +32,37 @@ export default async function AdminCandidatesPage({ searchParams }: PageProps<"/
 
       <form action="/admin/candidates" role="search" className="mt-6 flex max-w-lg gap-2">
         <label htmlFor="q" className="sr-only">Search candidates</label>
-        <input id="q" name="q" type="search" defaultValue={q} placeholder="Name or membership number" className="input" />
-        <button type="submit" className="btn btn-secondary">Search</button>
+        <input id="q" name="q" type="search" defaultValue={q} placeholder="Name or membership number" className="input min-w-0" />
+        <button type="submit" className="btn btn-secondary shrink-0">Search</button>
       </form>
 
-      <div className="mt-6 overflow-x-auto rounded-[var(--radius-lg)] border border-line bg-surface">
+      {/* Phones: one card per candidate. From 768px up: the full table. */}
+      <StaggerList className="mt-6 space-y-3 md:hidden">
+        {candidates.map((c) => (
+          <StaggerItem key={c.id} className="rounded-[var(--radius-lg)] border border-line bg-surface p-4">
+            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+              <Link href={`/admin/candidates/${c.id}`} className="link font-semibold [overflow-wrap:anywhere]">{c.fullName}</Link>
+              {!c.isPublished && <span className="text-sm text-ink-muted">(hidden)</span>}
+              {c.dataNotes && <span className="rounded-[var(--radius-sm)] bg-accent-soft px-1.5 py-0.5 text-xs font-semibold">Check data</span>}
+            </div>
+            <p className="tabular mt-1 text-[0.9375rem] text-ink-muted">{c.membershipNo ?? "No membership number"}</p>
+            <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-[0.9375rem]">
+              <div><dt className="text-sm text-ink-muted">Posts</dt><dd className="tabular font-semibold">{c._count.candidacies}</dd></div>
+              <div>
+                <dt className="text-sm text-ink-muted">Pending comments</dt>
+                <dd className="tabular font-semibold">
+                  {c._count.comments > 0 ? <Link href={`/admin/comments?candidate=${c.id}`} className="link">{c._count.comments}</Link> : "0"}
+                </dd>
+              </div>
+              <div><dt className="text-sm text-ink-muted">Photo</dt><dd>{c.photoKey ? "Uploaded" : <span className="text-ink-muted">Placeholder</span>}</dd></div>
+              <div><dt className="text-sm text-ink-muted">Manifesto</dt><dd>{c.manifesto ? "Published" : <span className="text-ink-muted">Not yet</span>}</dd></div>
+            </dl>
+          </StaggerItem>
+        ))}
+        {candidates.length === 0 && <li className="rounded-[var(--radius-lg)] border border-line bg-surface px-4 py-8 text-center text-ink-muted">No candidates match “{q}”.</li>}
+      </StaggerList>
+
+      <div className="mt-6 hidden overflow-x-auto rounded-[var(--radius-lg)] border border-line bg-surface md:block">
         <table className="w-full min-w-[44rem] text-left text-[0.9375rem]">
           <thead className="border-b border-line bg-canvas text-ink-muted">
             <tr>

@@ -57,7 +57,7 @@ export default async function EditCandidatePage({ params, searchParams }: PagePr
         </div>
       )}
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] xl:grid-cols-[minmax(0,1fr)_26rem]">
         <ActionForm action={updateCandidate} className="space-y-6">
           <input type="hidden" name="id" value={candidate.id} />
           <Panel title="Overview">

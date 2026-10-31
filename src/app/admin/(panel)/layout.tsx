@@ -28,13 +28,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         ];
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="min-h-dvh bg-canvas">
       <header className="border-b border-line bg-surface">
         <div className="h-1 bg-brand" aria-hidden="true" />
         <div className="container-site flex flex-wrap items-center justify-between gap-3 pt-3">
-          <Link href="/admin" className="flex items-center gap-2.5 rounded-md">
+          <Link href="/admin" className="flex min-w-0 items-center gap-2.5 rounded-md">
             <LogoMark size={28} />
-            <span className="font-semibold">Vote 4 BUETian administration</span>
+            <span className="text-[0.9375rem] font-semibold leading-tight sm:text-base">BUETians in IEB Election administration</span>
           </Link>
           <div className="flex items-center gap-3 text-[0.9375rem]">
             <span className="hidden text-ink-muted sm:inline">
@@ -50,7 +50,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <AdminNav items={items} />
         </div>
       </header>
-      <main id="main" className="container-site py-8">{children}</main>
+      <main id="main" className="container-site py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:py-8">{children}</main>
     </div>
   );
 }

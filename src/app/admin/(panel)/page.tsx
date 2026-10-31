@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AutoRefresh } from "@/components/admin/AutoRefresh";
-import { Emoji, Reveal, StaggerItem, StaggerList } from "@/components/motion";
+import { Reveal, StaggerItem, StaggerList } from "@/components/motion";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formatDateTime } from "@/lib/format";
@@ -43,13 +43,13 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
   ]);
 
   const stats = [
-    { icon: "⏳", label: "Comments awaiting review", value: pending, href: "/admin/comments" },
-    { icon: "✅", label: "Approved comments", value: approved, href: "/admin/comments?status=approved" },
+    { label: "Comments awaiting review", value: pending, href: "/admin/comments" },
+    { label: "Approved comments", value: approved, href: "/admin/comments?status=approved" },
     ...(admin.role === "admin"
       ? [
-          { icon: "👥", label: "Candidates", value: candidates, href: "/admin/candidates" },
-          { icon: "📷", label: "Candidates with a photo", value: `${withPhoto} of ${candidates}`, href: "/admin/candidates" },
-          { icon: "📜", label: "Candidates with a manifesto", value: `${withManifesto} of ${candidates}`, href: "/admin/candidates" },
+          { label: "Candidates", value: candidates, href: "/admin/candidates" },
+          { label: "Candidates with a photo", value: `${withPhoto} of ${candidates}`, href: "/admin/candidates" },
+          { label: "Candidates with a manifesto", value: `${withManifesto} of ${candidates}`, href: "/admin/candidates" },
         ]
       : []),
   ];
@@ -69,8 +69,7 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
         {stats.map((s) => (
           <StaggerItem key={s.label} lift>
             <Link href={s.href} className="block h-full rounded-[var(--radius-lg)] border border-line bg-surface p-3.5 transition-[border-color,box-shadow] duration-[var(--dur-short)] hover:border-line-strong hover:shadow-[var(--shadow-lift)] sm:p-4">
-              <Emoji className="text-[1.25rem]">{s.icon}</Emoji>
-              <span className="tabular mt-1 block text-[1.5rem] font-semibold leading-tight [overflow-wrap:anywhere] sm:text-[1.75rem]">{s.value}</span>
+              <span className="tabular block text-[1.5rem] font-semibold leading-tight [overflow-wrap:anywhere] sm:text-[1.75rem]">{s.value}</span>
               <span className="mt-1 block text-[0.875rem] leading-snug text-ink-muted sm:text-[0.9375rem]">{s.label}</span>
             </Link>
           </StaggerItem>

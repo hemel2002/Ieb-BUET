@@ -109,15 +109,6 @@ export function StaggerItem({ children, className, lift }: { children: React.Rea
   );
 }
 
-/** Emoji used as decoration: sized with the text and hidden from screen readers. */
-export function Emoji({ children, className = "" }: { children: string; className?: string }) {
-  return (
-    <span aria-hidden="true" className={`emoji ${className}`}>
-      {children}
-    </span>
-  );
-}
-
 /** Gently bobs its child, for a single friendly accent such as the emoji on an empty state. */
 export function Float({ children, className }: { children: React.ReactNode; className?: string }) {
   return (

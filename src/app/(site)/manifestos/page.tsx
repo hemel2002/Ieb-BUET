@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
-import { Emoji, Float, Reveal, StaggerItem, StaggerList } from "@/components/motion";
+import { Reveal, StaggerItem, StaggerList } from "@/components/motion";
 import { positionTitle, sortCandidacies, candidacyInclude } from "@/lib/candidates";
 import { db } from "@/lib/db";
 import { formatDate } from "@/lib/format";
@@ -38,8 +38,7 @@ export default async function ManifestosPage() {
 
       {candidates.length === 0 ? (
         <Reveal immediate delay={0.1} className="mt-10 rounded-[var(--radius-lg)] border border-dashed border-line-strong px-6 py-14 text-center">
-          <Float className="text-[2rem]"><Emoji>📜</Emoji></Float>
-          <h2 className="mt-2 font-sans text-[1.125rem] font-semibold">No manifestos have been published yet</h2>
+          <h2 className="font-sans text-[1.125rem] font-semibold">No manifestos have been published yet</h2>
           <p className="mx-auto mt-2 max-w-md text-ink-muted">
             Candidate manifestos will appear here once they are added. In the meantime you can browse candidate profiles.
           </p>

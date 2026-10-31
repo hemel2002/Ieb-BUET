@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { CandidatePhoto } from "@/components/CandidatePhoto";
 import { CommentForm } from "@/components/CommentForm";
-import { Emoji, Reveal, StaggerItem, StaggerList } from "@/components/motion";
+import { Reveal, StaggerItem, StaggerList } from "@/components/motion";
 import { RichText } from "@/components/RichText";
 import { positionContext, positionTitle, publishedCandidate } from "@/lib/candidates";
 import { approvedComments, issueFormToken } from "@/lib/comments";
@@ -106,9 +106,9 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
           </dl>
 
           <nav aria-label="On this page" className="mt-8 flex flex-wrap gap-2">
-            <a href="#background" className="btn btn-secondary btn-sm"><Emoji>🎓</Emoji> Background</a>
-            <a href="#manifesto" className="btn btn-secondary btn-sm"><Emoji>📜</Emoji> Manifesto</a>
-            <a href="#comments" className="btn btn-secondary btn-sm"><Emoji>💬</Emoji> Comments ({comments.length})</a>
+            <a href="#background" className="btn btn-secondary btn-sm">Background</a>
+            <a href="#manifesto" className="btn btn-secondary btn-sm">Manifesto</a>
+            <a href="#comments" className="btn btn-secondary btn-sm">Comments ({comments.length})</a>
           </nav>
         </Reveal>
       </header>

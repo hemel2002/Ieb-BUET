@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { postComment, type CommentFormState } from "@/app/(site)/candidates/[slug]/actions";
 import type { CommentJson } from "@/lib/comments";
-import { EASE, Emoji } from "./motion";
+import { EASE } from "./motion";
 import { SubmitButton } from "./SubmitButton";
 
 const BODY_MAX = 1500;
@@ -52,7 +52,7 @@ export function CommentForm({ candidateId, candidateName, token, onPosted }: Pro
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.35, ease: EASE }}
           >
-            <Emoji>🙏</Emoji> Thank you for your feedback. Your comment is awaiting review: you can see it above, and it
+            Thank you for your feedback. Your comment is awaiting review: you can see it above, and it
             will appear for everyone once an administrator approves it.
           </motion.p>
         )}

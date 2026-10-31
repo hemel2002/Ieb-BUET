@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LogoMark } from "./Logo";
-import { Emoji, Reveal } from "./motion";
+import { Reveal } from "./motion";
 
 export function SiteFooter() {
   return (
@@ -26,7 +26,7 @@ export function SiteFooter() {
         </nav>
         <div>
           <h2 className="font-sans text-[0.9375rem] font-semibold">
-            Feedback <Emoji>💬</Emoji>
+            Feedback
           </h2>
           <p className="mt-3 text-[0.9375rem] text-ink-muted">
             Comments on candidate pages are published only after review.

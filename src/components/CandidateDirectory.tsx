@@ -5,7 +5,7 @@ import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { plural } from "@/lib/format";
 import type { GroupWithPositions } from "@/lib/candidates";
 import { CandidateCard } from "./CandidateCard";
-import { EASE, Emoji, Float, Reveal } from "./motion";
+import { EASE, Reveal } from "./motion";
 
 const normalise = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
 
@@ -122,8 +122,7 @@ export function CandidateDirectory({
 
       {entryCount === 0 ? (
         <Reveal className="mt-6 rounded-[var(--radius-lg)] border border-dashed border-line-strong px-6 py-12 text-center">
-          <Float className="text-[2rem]"><Emoji>🔍</Emoji></Float>
-          <h2 className="mt-2 font-sans text-[1.125rem] font-semibold">No candidates match your search</h2>
+          <h2 className="font-sans text-[1.125rem] font-semibold">No candidates match your search</h2>
           <p className="mt-2 text-ink-muted">Check the spelling, try part of the name, or search all positions.</p>
           <button type="button" onClick={clear} className="btn btn-secondary mt-5">Show all candidates</button>
         </Reveal>

@@ -4,7 +4,6 @@ import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "framer-
 import Link from "next/link";
 import { useRef, useState } from "react";
 import type { GroupWithPositions } from "@/lib/candidates";
-import { Emoji } from "./motion";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -30,7 +29,7 @@ export function BallotBrowser({ groups }: { groups: GroupWithPositions[] }) {
       >
         <h1 className="title-page">BUETians in IEB Election</h1>
         <p className="mt-3 max-w-xl text-[1.0625rem] text-ink-muted sm:text-[1.1875rem]">
-          <Emoji>🗳️</Emoji> BUET alumni candidates, IEB Election 2027-2028. Choose a post to see who is standing.
+          BUET alumni candidates, IEB Election 2027-2028. Choose a post to see who is standing.
         </p>
       </motion.header>
 

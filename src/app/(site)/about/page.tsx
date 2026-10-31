@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
-import { Emoji, Reveal } from "@/components/motion";
+import { Reveal } from "@/components/motion";
 import { RichText } from "@/components/RichText";
 import { siteContent, SITE_CONTENT_KEYS } from "@/lib/candidates";
 
@@ -57,7 +57,7 @@ export default async function AboutPage() {
         <Reveal className="mt-10 sm:mt-12">
           <section aria-labelledby="comments-heading">
             <h2 id="comments-heading" className="title-section">
-              How comments work <Emoji>💬</Emoji>
+              How comments work
             </h2>
             <ul className="mt-4 list-disc space-y-2 pl-6 marker:text-brand">
               <li>Every comment is reviewed by an administrator before it appears. Nothing is published automatically.</li>

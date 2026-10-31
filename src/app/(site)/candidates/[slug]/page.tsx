@@ -50,7 +50,7 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
   ];
 
   return (
-    <article className="container-site py-8 sm:py-10">
+    <article className="container-site pb-8 pt-5 sm:pb-10 sm:pt-6">
       <nav aria-label="Breadcrumb" className="text-[0.9375rem] text-ink-muted">
         <ol className="flex flex-wrap gap-2">
           <li><Link href="/candidates" className="link">Candidates</Link></li>

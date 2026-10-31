@@ -1,12 +1,14 @@
 "use server";
 
-import { submitComment } from "@/lib/comments";
+import { submitComment, type CommentJson } from "@/lib/comments";
 
 export type CommentFormState = {
   status: "idle" | "success" | "error";
   message?: string;
   fieldErrors?: Partial<Record<"name" | "body", string>>;
   values?: { visibility: string; name: string; body: string };
+  /** On success: the comment just stored (still pending review), so the page can show it to its author at once. */
+  posted?: CommentJson;
   attempt: number;
 };
 
@@ -25,6 +27,6 @@ export async function postComment(prev: CommentFormState, fd: FormData): Promise
     honeypot: field(fd, "website"),
     token: field(fd, "token"),
   });
-  if (result.ok) return { status: "success", attempt: prev.attempt + 1 };
+  if (result.ok) return { status: "success", posted: result.comment, attempt: prev.attempt + 1 };
   return { status: "error", message: result.message, fieldErrors: result.fieldErrors, values, attempt: prev.attempt + 1 };
 }

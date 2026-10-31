@@ -1,11 +1,19 @@
 "use client";
 
 import { MotionConfig, motion, type Variants } from "framer-motion";
+import { Children, createContext, useContext, useEffect } from "react";
 
 export const EASE = [0.22, 1, 0.36, 1] as const;
 
-/** Honours the visitor's "reduce motion" setting for every animation underneath it. */
+/**
+ * Honours the visitor's "reduce motion" setting for every animation underneath it, and marks the page as
+ * hydrated. Entrance animations start hidden in the server HTML; until `data-hydrated` is set, globals.css
+ * reveals them on its own after a short delay, so a slow connection never leaves the page blank.
+ */
 export function MotionProvider({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    document.documentElement.dataset.hydrated = "true";
+  }, []);
   return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
 }
 
@@ -46,13 +54,21 @@ export function Reveal({ children, className, delay = 0, y = 16, x = 0, immediat
 
 const listVariants: Variants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.05, delayChildren: 0.02 } },
+  show: {},
 };
 
+/** Each item waits 50ms per position, but never more than 10 positions, so a 100-row list still finishes in ~0.9s. */
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
+  show: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: EASE, delay: 0.02 + Math.min(index, 10) * 0.05 },
+  }),
 };
+
+/** Position of a StaggerItem within its StaggerList. */
+const ItemIndex = createContext(0);
 
 type StaggerListProps = {
   children: React.ReactNode;
@@ -71,17 +87,21 @@ export function StaggerList({ children, className, as = "ul" }: StaggerListProps
       whileInView="show"
       viewport={{ once: true, margin: "0px 0px -6% 0px" }}
     >
-      {children}
+      {Children.map(children, (child, index) => (
+        <ItemIndex.Provider value={index}>{child}</ItemIndex.Provider>
+      ))}
     </Tag>
   );
 }
 
 /** Direct child of StaggerList. `lift` raises the item slightly under a mouse pointer. */
 export function StaggerItem({ children, className, lift }: { children: React.ReactNode; className?: string; lift?: boolean }) {
+  const index = useContext(ItemIndex);
   return (
     <motion.li
       className={className}
       variants={itemVariants}
+      custom={index}
       whileHover={lift ? { y: -3, transition: { duration: 0.18 } } : undefined}
     >
       {children}

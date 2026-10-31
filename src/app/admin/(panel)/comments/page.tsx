@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AutoSubmitSelect } from "@/components/AutoSubmitSelect";
+import { AutoRefresh } from "@/components/admin/AutoRefresh";
 import { StaggerItem, StaggerList } from "@/components/motion";
 import { SubmitButton } from "@/components/SubmitButton";
 import { requireAdmin } from "@/lib/auth";
@@ -57,6 +58,13 @@ export default async function CommentsPage({ searchParams }: PageProps<"/admin/c
     <div>
       <h1 className="text-[1.75rem]">Comments</h1>
       <p className="mt-1 text-ink-muted">Only approved comments appear on the public site. Pending comments are listed oldest first.</p>
+      {/* Only the pending list refreshes itself: new comments join the end, so nothing moves under the cursor. */}
+      {status === "pending" && (
+        <>
+          <AutoRefresh />
+          <p className="mt-1 text-sm text-ink-muted">New comments appear here automatically.</p>
+        </>
+      )}
 
       <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
         <nav aria-label="Filter by status" className="flex flex-wrap gap-2">

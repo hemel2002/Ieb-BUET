@@ -14,7 +14,7 @@ export default async function AboutPage() {
   const vision = content[SITE_CONTENT_KEYS.vision]?.trim();
 
   return (
-    <div className="container-site py-10 sm:py-12">
+    <div className="container-site pb-10 pt-5 sm:pb-12 sm:pt-8">
       <div className="max-w-[var(--container-prose)]">
         <Reveal immediate>
           <h1 className="title-page">About this site</h1>

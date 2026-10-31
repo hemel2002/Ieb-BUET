@@ -27,7 +27,7 @@ export default async function ManifestosPage() {
   ]);
 
   return (
-    <div className="container-site py-10 sm:py-12">
+    <div className="container-site pb-10 pt-5 sm:pb-12 sm:pt-8">
       <Reveal immediate>
         <h1 className="title-page">Manifestos</h1>
         <p className="mt-3 max-w-[var(--container-prose)] text-ink-muted">

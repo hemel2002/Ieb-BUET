@@ -297,6 +297,19 @@ body {
   }
 }
 
+/* Safety net for slow connections: framer-motion hides entrance-animated blocks in the server HTML. If the
+   scripts have not hydrated the page (MotionProvider sets data-hydrated) after 2.5s, fade them in anyway. */
+@keyframes reveal-fallback {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+html:not([data-hydrated]) [style*="opacity:0"],
+html:not([data-hydrated]) [style*="opacity: 0"] {
+  animation: reveal-fallback 0.4s ease 2.5s forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

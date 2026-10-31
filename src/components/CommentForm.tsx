@@ -3,25 +3,38 @@
 import { motion } from "framer-motion";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { postComment, type CommentFormState } from "@/app/(site)/candidates/[slug]/actions";
+import type { CommentJson } from "@/lib/comments";
 import { EASE, Emoji } from "./motion";
 import { SubmitButton } from "./SubmitButton";
 
 const BODY_MAX = 1500;
 const initial: CommentFormState = { status: "idle", attempt: 0 };
 
-export function CommentForm({ candidateId, candidateName, token }: { candidateId: string; candidateName: string; token: string }) {
+type Props = {
+  candidateId: string;
+  candidateName: string;
+  token: string;
+  /** Called with the stored comment after a successful submit, so the page can show it to its author at once. */
+  onPosted?: (comment: CommentJson) => void;
+};
+
+export function CommentForm({ candidateId, candidateName, token, onPosted }: Props) {
   const [state, action] = useActionState(postComment, initial);
   const [visibility, setVisibility] = useState(state.values?.visibility ?? "public");
   const [length, setLength] = useState(0);
   const statusRef = useRef<HTMLDivElement>(null);
+  const onPostedRef = useRef(onPosted);
+  onPostedRef.current = onPosted;
 
   useEffect(() => {
     if (state.status === "idle") return;
     if (state.status === "success") {
       setVisibility("public");
       setLength(0);
+      if (state.posted) onPostedRef.current?.(state.posted);
     }
-    statusRef.current?.focus();
+    // preventScroll: after a success the page scrolls to the new comment instead of jumping back to this message.
+    statusRef.current?.focus({ preventScroll: state.status === "success" });
   }, [state]);
 
   const errors = state.fieldErrors ?? {};
@@ -39,8 +52,8 @@ export function CommentForm({ candidateId, candidateName, token }: { candidateId
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.35, ease: EASE }}
           >
-            <Emoji>🙏</Emoji> Thank you for your feedback. Your comment has been submitted for review and will appear
-            after administrator approval.
+            <Emoji>🙏</Emoji> Thank you for your feedback. Your comment is awaiting review: you can see it above, and it
+            will appear for everyone once an administrator approves it.
           </motion.p>
         )}
         {state.status === "error" && state.message && (

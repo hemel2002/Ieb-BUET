@@ -23,8 +23,12 @@ const LIMITS = [
 /** Comment shape exposed to the public. Deliberately has no field that can identify an anonymous author. */
 export type PublicComment = { id: string; author: string; body: string; submittedAt: Date };
 
+/** A comment as plain JSON, for the browser (dates as ISO strings). */
+export type CommentJson = { id: string; author: string; body: string; submittedAt: string };
+
 export type SubmitResult =
-  | { ok: true }
+  /** `comment` is what the commenter just wrote, handed back so they can see it at once while it awaits review. */
+  | { ok: true; comment?: CommentJson }
   | { ok: false; message: string; fieldErrors?: Partial<Record<"name" | "body", string>> };
 
 /** Signed render timestamp; rejects instant (bot) submissions and forged tokens. */
@@ -131,19 +135,18 @@ export async function submitComment(input: SubmitInput): Promise<SubmitResult> {
 
   const comment = await db.comment.create({
     data: { candidateId: candidate.id, isAnonymous, displayName, body: body.data, contentHash, ipHash, status: "pending" },
-    select: { id: true },
+    select: { id: true, createdAt: true },
   });
   log("info", "comment.submitted", { commentId: comment.id, candidateId: candidate.id });
-  return { ok: true };
+  return {
+    ok: true,
+    comment: { id: comment.id, author: displayName ?? "Anonymous", body: body.data, submittedAt: comment.createdAt.toISOString() },
+  };
 }
 
-/** Approved comments only, oldest first. Anonymous comments never expose a name. */
-export async function approvedComments(candidateId: string): Promise<PublicComment[]> {
-  const rows = await db.comment.findMany({
-    where: { candidateId, status: "approved" },
-    orderBy: { createdAt: "asc" },
-    select: { id: true, body: true, createdAt: true, isAnonymous: true, displayName: true },
-  });
+const commentSelect = { id: true, body: true, createdAt: true, isAnonymous: true, displayName: true } as const;
+
+function toPublic(rows: { id: string; body: string; createdAt: Date; isAnonymous: boolean; displayName: string | null }[]): PublicComment[] {
   return rows.map((c) => ({
     id: c.id,
     author: c.isAnonymous || !c.displayName ? "Anonymous" : c.displayName,
@@ -151,6 +154,26 @@ export async function approvedComments(candidateId: string): Promise<PublicComme
     submittedAt: c.createdAt,
   }));
 }
+
+/** Approved comments only, oldest first. Anonymous comments never expose a name. */
+export async function approvedComments(candidateId: string): Promise<PublicComment[]> {
+  return toPublic(
+    await db.comment.findMany({ where: { candidateId, status: "approved" }, orderBy: { createdAt: "asc" }, select: commentSelect }),
+  );
+}
+
+/** Same as approvedComments, looked up by profile slug in one query, for the live-refresh endpoint. */
+export async function approvedCommentsBySlug(slug: string): Promise<PublicComment[]> {
+  return toPublic(
+    await db.comment.findMany({
+      where: { status: "approved", candidate: { slug, isPublished: true } },
+      orderBy: { createdAt: "asc" },
+      select: commentSelect,
+    }),
+  );
+}
+
+export const toCommentJson = (c: PublicComment): CommentJson => ({ ...c, submittedAt: c.submittedAt.toISOString() });
 
 export function isCommentStatus(value: unknown): value is CommentStatus {
   return typeof value === "string" && (COMMENT_STATUSES as readonly string[]).includes(value);

@@ -3,11 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { CandidatePhoto } from "@/components/CandidatePhoto";
-import { CommentForm } from "@/components/CommentForm";
-import { Emoji, Reveal, StaggerItem, StaggerList } from "@/components/motion";
+import { CommentCount, CommentSection } from "@/components/CommentSection";
+import { Emoji, Reveal } from "@/components/motion";
 import { RichText } from "@/components/RichText";
 import { positionContext, positionTitle, publishedCandidate } from "@/lib/candidates";
-import { approvedComments, issueFormToken } from "@/lib/comments";
+import { approvedComments, issueFormToken, toCommentJson } from "@/lib/comments";
 import { formatDate, plural } from "@/lib/format";
 
 export async function generateMetadata({ params }: PageProps<"/candidates/[slug]">): Promise<Metadata> {
@@ -50,7 +50,7 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
   ];
 
   return (
-    <article className="container-site py-8 sm:py-10">
+    <article className="container-site pb-8 pt-5 sm:pb-10 sm:pt-6">
       <nav aria-label="Breadcrumb" className="text-[0.9375rem] text-ink-muted">
         <ol className="flex flex-wrap gap-2">
           <li><Link href="/candidates" className="link">Candidates</Link></li>
@@ -108,7 +108,7 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
           <nav aria-label="On this page" className="mt-8 flex flex-wrap gap-2">
             <a href="#background" className="btn btn-secondary btn-sm"><Emoji>🎓</Emoji> Background</a>
             <a href="#manifesto" className="btn btn-secondary btn-sm"><Emoji>📜</Emoji> Manifesto</a>
-            <a href="#comments" className="btn btn-secondary btn-sm"><Emoji>💬</Emoji> Comments ({comments.length})</a>
+            <a href="#comments" className="btn btn-secondary btn-sm"><Emoji>💬</Emoji> Comments (<CommentCount initial={comments.length} />)</a>
           </nav>
         </Reveal>
       </header>
@@ -157,30 +157,13 @@ export default async function CandidatePage({ params }: PageProps<"/candidates/[
           <Reveal>
             <h2 id="comments-heading" className="title-section border-b-2 border-brand pb-2">Voter comments</h2>
           </Reveal>
-          {comments.length === 0 ? (
-            <p className="mt-6 text-ink-muted">No comments have been published for this candidate yet.</p>
-          ) : (
-            <StaggerList as="ol" className="mt-6 space-y-4">
-              {comments.map((c) => (
-                <StaggerItem key={c.id} className="rounded-[var(--radius-lg)] border border-line p-4 sm:p-5">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                    <p className={`font-semibold ${c.author === "Anonymous" ? "text-ink-muted" : ""}`}>{c.author}</p>
-                    <p className="text-sm text-ink-muted">
-                      <time dateTime={c.submittedAt.toISOString()}>{formatDate(c.submittedAt)}</time>
-                    </p>
-                  </div>
-                  <p className="mt-2 whitespace-pre-line [overflow-wrap:anywhere]">{c.body}</p>
-                </StaggerItem>
-              ))}
-            </StaggerList>
-          )}
-
-          <Reveal className="mt-10 rounded-[var(--radius-lg)] border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-7">
-            <h3 className="text-[1.25rem]">Leave a comment</h3>
-            <div className="mt-5">
-              <CommentForm candidateId={candidate.id} candidateName={candidate.fullName} token={issueFormToken()} />
-            </div>
-          </Reveal>
+          <CommentSection
+            slug={candidate.slug}
+            candidateId={candidate.id}
+            candidateName={candidate.fullName}
+            token={issueFormToken()}
+            initialComments={comments.map(toCommentJson)}
+          />
         </section>
       </div>
     </article>

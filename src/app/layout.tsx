@@ -16,8 +16,10 @@ export const viewport: Viewport = { themeColor: "#b71c1c", width: "device-width"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${sans.variable} ${serif.variable}`}>
-      <body className="min-h-dvh">
+    // suppressHydrationWarning: browser extensions (Grammarly, translators, dark-mode tools) add attributes to
+    // <html> and <body> before React loads, which would otherwise log a hydration mismatch on those two elements.
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={`${sans.variable} ${serif.variable}`}>
+      <body className="min-h-dvh" suppressHydrationWarning>
         {/* Entrance animations start hidden; without JavaScript they would never run, so show everything. */}
         <noscript>
           <style>{`[style*="opacity: 0"],[style*="opacity:0"]{opacity:1!important;transform:none!important}`}</style>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AutoRefresh } from "@/components/admin/AutoRefresh";
 import { Emoji, Reveal, StaggerItem, StaggerList } from "@/components/motion";
 import { requireAdmin } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -55,6 +56,7 @@ export default async function AdminHome({ searchParams }: PageProps<"/admin">) {
 
   return (
     <div>
+      <AutoRefresh />
       <Reveal immediate>
         <h1 className="text-[1.5rem] sm:text-[1.75rem]">Overview</h1>
       </Reveal>

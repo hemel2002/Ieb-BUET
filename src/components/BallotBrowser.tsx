@@ -2,7 +2,7 @@
 
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { GroupWithPositions } from "@/lib/candidates";
 import { Emoji } from "./motion";
 
@@ -19,6 +19,7 @@ export function BallotBrowser({ groups }: { groups: GroupWithPositions[] }) {
   const [activeId, setActiveId] = useState(groups[0]?.id);
   const active = groups.find((g) => g.id === activeId) ?? groups[0];
   const reduceMotion = useReducedMotion();
+  const listRef = useRef<HTMLDivElement>(null);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -35,11 +36,11 @@ export function BallotBrowser({ groups }: { groups: GroupWithPositions[] }) {
 
       {active ? (
         <>
-          {/* One swipeable strip on phones so the list stays in view; wraps on wider screens. */}
+          {/* Every post is always visible: the chips wrap onto as many lines as the screen needs, never scroll sideways. */}
           <motion.div
             role="group"
             aria-label="Posts"
-            className="-mx-4 -mb-2 mt-6 flex gap-2 overflow-x-auto px-4 py-2 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden"
+            className="mt-6 flex flex-wrap gap-1.5 sm:gap-2"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.08, ease: EASE }}
@@ -52,16 +53,16 @@ export function BallotBrowser({ groups }: { groups: GroupWithPositions[] }) {
                   key={g.id}
                   type="button"
                   aria-pressed={selected}
-                  onClick={(e) => {
+                  onClick={() => {
                     setActiveId(g.id);
-                    e.currentTarget.scrollIntoView({
-                      behavior: reduceMotion ? "auto" : "smooth",
-                      inline: "center",
-                      block: "nearest",
-                    });
+                    // On a phone the chips can fill the screen, so bring the chosen list up under them.
+                    const list = listRef.current;
+                    if (list && list.getBoundingClientRect().top > window.innerHeight * 0.5) {
+                      list.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+                    }
                   }}
                   whileTap={{ scale: 0.97 }}
-                  className={`relative shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-[0.9375rem] font-medium transition-colors duration-[var(--dur-short)] ${
+                  className={`relative max-w-full rounded-full border px-3 py-1.5 text-left text-[0.875rem] font-medium leading-snug transition-colors duration-[var(--dur-short)] sm:px-4 sm:py-2 sm:text-[0.9375rem] ${
                     selected ? "border-brand text-white" : "border-line-strong text-ink hover:border-ink"
                   }`}
                 >
@@ -81,18 +82,19 @@ export function BallotBrowser({ groups }: { groups: GroupWithPositions[] }) {
             })}
           </motion.div>
 
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.section
-              key={active.id}
-              aria-labelledby="active-post-heading"
-              className="mt-10"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } }}
-              exit={{ opacity: 0, y: -6, transition: { duration: 0.15 } }}
-            >
-              <Panel group={active} />
-            </motion.section>
-          </AnimatePresence>
+          <div ref={listRef} className="mt-8 scroll-mt-4 sm:mt-10">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.section
+                key={active.id}
+                aria-labelledby="active-post-heading"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } }}
+                exit={{ opacity: 0, y: -6, transition: { duration: 0.15 } }}
+              >
+                <Panel group={active} />
+              </motion.section>
+            </AnimatePresence>
+          </div>
         </>
       ) : (
         <p className="mt-10 text-ink-muted">No candidates have been published yet.</p>
